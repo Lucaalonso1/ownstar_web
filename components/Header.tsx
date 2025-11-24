@@ -14,9 +14,10 @@ interface Collection {
 
 interface HeaderProps {
   collections?: Collection[];
+  forceWhite?: boolean;
 }
 
-export function Header({ collections = [] }: HeaderProps) {
+export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
@@ -54,7 +55,7 @@ export function Header({ collections = [] }: HeaderProps) {
         ];
 
   const isWhiteBackground =
-    isScrolled || isCollectionsOpen || isHeaderHovered;
+    forceWhite || isScrolled || isCollectionsOpen || isHeaderHovered;
 
   return (
     <header
