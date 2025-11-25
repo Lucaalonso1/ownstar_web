@@ -106,14 +106,8 @@ export function Footer() {
           
           {/* Socials */}
           <div className="flex gap-6">
-            <Link href="https://instagram.com" target="_blank" className="text-neutral-400 hover:text-white transition-colors">
+            <Link href="https://instagram.com/ownstar.co" target="_blank" className="text-neutral-400 hover:text-white transition-colors">
               <Instagram className="w-5 h-5" />
-            </Link>
-            <Link href="https://twitter.com" target="_blank" className="text-neutral-400 hover:text-white transition-colors">
-              <Twitter className="w-5 h-5" />
-            </Link>
-            <Link href="https://facebook.com" target="_blank" className="text-neutral-400 hover:text-white transition-colors">
-              <Facebook className="w-5 h-5" />
             </Link>
           </div>
           

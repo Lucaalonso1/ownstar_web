@@ -21,20 +21,63 @@ interface ShopClientProps {
   products: Product[];
 }
 
-export default function ShopClient({ products }: ShopClientProps) {
+export default function ShopClient({ products, hideHero = false }: ShopClientProps & { hideHero?: boolean }) {
   const [isVisible, setIsVisible] = useState(false);
+  const [activeProducts, setActiveProducts] = useState(products);
+  
+  // Filter & Sort States
+  const [showSort, setShowSort] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [sortOption, setSortOption] = useState("default"); // default, price-asc, price-desc, newest
+  const [filterOption, setFilterOption] = useState("all"); // all, available, new
 
   // Trigger intro animation on mount
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
-  // Simple Intersection Observer for scroll animations could be added here
-  // For now we use CSS group-hover and entry animations
+  // Logic for Sorting and Filtering
+  useEffect(() => {
+    let filtered = [...products];
+
+    // 1. Filter
+    if (filterOption === "available") {
+      filtered = filtered.filter((p) => p.isAvailable !== false);
+    } else if (filterOption === "new") {
+      filtered = filtered.filter((p) => p.isNew);
+    }
+
+    // 2. Sort
+    if (sortOption === "price-asc") {
+      filtered.sort((a, b) => {
+        const priceA = parseFloat(a.price.replace(/[^0-9.,]/g, "").replace(",", "."));
+        const priceB = parseFloat(b.price.replace(/[^0-9.,]/g, "").replace(",", "."));
+        return priceA - priceB;
+      });
+    } else if (sortOption === "price-desc") {
+      filtered.sort((a, b) => {
+        const priceA = parseFloat(a.price.replace(/[^0-9.,]/g, "").replace(",", "."));
+        const priceB = parseFloat(b.price.replace(/[^0-9.,]/g, "").replace(",", "."));
+        return priceB - priceA;
+      });
+    } else if (sortOption === "newest") {
+      // Assuming isNew is the only "newness" indicator we have on the client for now
+      filtered.sort((a, b) => (a.isNew === b.isNew ? 0 : a.isNew ? -1 : 1));
+    }
+
+    setActiveProducts(filtered);
+  }, [products, sortOption, filterOption]);
+
+  // Close menus when clicking outside (simple version using backdrop)
+  const closeMenus = () => {
+    setShowSort(false);
+    setShowFilter(false);
+  };
 
   return (
     <main className="min-h-screen">
       {/* Creative Hero Section */}
+      {!hideHero && (
       <section className="relative w-full h-[50vh] md:h-[70vh] overflow-hidden flex items-center justify-center bg-neutral-100">
          {/* Placeholder creative image/video background - User can replace */}
          <div className="absolute inset-0 z-0">
@@ -61,22 +104,91 @@ export default function ShopClient({ products }: ShopClientProps) {
              </p>
          </div>
       </section>
+      )}
 
       {/* Filter Bar (Minimalist) */}
+      {!hideHero && (
       <div className="sticky top-[54px] z-40 bg-white/80 backdrop-blur-md border-b border-neutral-100 py-4 px-6 md:px-12 flex justify-between items-center mt-0">
          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
-            {products.length} Productos
+            {activeProducts.length} Productos
          </span>
-         <div className="flex gap-6 text-xs font-bold uppercase tracking-widest cursor-pointer">
-             <span className="hover:text-neutral-500 transition-colors">Filtrar</span>
-             <span className="hover:text-neutral-500 transition-colors">Ordenar</span>
+         
+         <div className="flex gap-6 text-xs font-bold uppercase tracking-widest relative">
+             {/* Filter Button & Dropdown */}
+             <div className="relative">
+               <button 
+                 onClick={() => { setShowFilter(!showFilter); setShowSort(false); }}
+                 className={cn("hover:text-neutral-500 transition-colors", filterOption !== 'all' && "text-black underline")}
+               >
+                 Filtrar
+               </button>
+               
+               {showFilter && (
+                 <div className="absolute top-full right-0 mt-4 w-48 bg-white border border-neutral-100 shadow-xl p-2 flex flex-col gap-1 z-50">
+                   {[
+                     { label: "Todos", value: "all" },
+                     { label: "Disponibles", value: "available" },
+                     { label: "Nuevos", value: "new" }
+                   ].map((opt) => (
+                     <button
+                       key={opt.value}
+                       onClick={() => { setFilterOption(opt.value); setShowFilter(false); }}
+                       className={cn(
+                         "text-left px-4 py-2 text-[10px] uppercase tracking-wide hover:bg-neutral-50 transition-colors",
+                         filterOption === opt.value ? "font-bold text-black" : "text-neutral-500"
+                       )}
+                     >
+                       {opt.label}
+                     </button>
+                   ))}
+                 </div>
+               )}
+             </div>
+
+             {/* Sort Button & Dropdown */}
+             <div className="relative">
+               <button 
+                 onClick={() => { setShowSort(!showSort); setShowFilter(false); }}
+                 className={cn("hover:text-neutral-500 transition-colors", sortOption !== 'default' && "text-black underline")}
+               >
+                 Ordenar
+               </button>
+
+               {showSort && (
+                 <div className="absolute top-full right-0 mt-4 w-48 bg-white border border-neutral-100 shadow-xl p-2 flex flex-col gap-1 z-50">
+                   {[
+                     { label: "Relevancia", value: "default" },
+                     { label: "Lo más nuevo", value: "newest" },
+                     { label: "Precio: Bajo a Alto", value: "price-asc" },
+                     { label: "Precio: Alto a Bajo", value: "price-desc" }
+                   ].map((opt) => (
+                     <button
+                       key={opt.value}
+                       onClick={() => { setSortOption(opt.value); setShowSort(false); }}
+                       className={cn(
+                         "text-left px-4 py-2 text-[10px] uppercase tracking-wide hover:bg-neutral-50 transition-colors",
+                         sortOption === opt.value ? "font-bold text-black" : "text-neutral-500"
+                       )}
+                     >
+                       {opt.label}
+                     </button>
+                   ))}
+                 </div>
+               )}
+             </div>
          </div>
       </div>
+      )}
+
+      {/* Backdrop for closing menus */}
+      {(showSort || showFilter) && (
+        <div className="fixed inset-0 z-30 bg-transparent" onClick={closeMenus} />
+      )}
 
       {/* Creative Grid */}
       <section className="px-4 md:px-8 py-12 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 md:gap-y-24">
-           {products.map((product, index) => (
+           {activeProducts.map((product, index) => (
               <div 
                 key={product.id}
                 className={cn(
@@ -135,7 +247,7 @@ export default function ShopClient({ products }: ShopClientProps) {
            ))}
         </div>
 
-        {products.length === 0 && (
+        {activeProducts.length === 0 && (
             <div className="h-[50vh] flex items-center justify-center text-neutral-400 uppercase tracking-widest text-sm">
                 No se encontraron productos
             </div>
