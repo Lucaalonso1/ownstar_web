@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { createCustomer, createCustomerAccessToken, getCustomer } from "@/lib/shopify";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AccountClient() {
+  const { t } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -112,7 +114,7 @@ export default function AccountClient() {
               isLogin ? "text-black" : "text-neutral-300 hover:text-neutral-500"
             }`}
           >
-            Iniciar Sesión
+            {t.auth.login}
           </button>
           <button
             onClick={() => setIsLogin(false)}
@@ -120,7 +122,7 @@ export default function AccountClient() {
               !isLogin ? "text-black" : "text-neutral-300 hover:text-neutral-500"
             }`}
           >
-            Registrarse
+            {t.auth.register}
           </button>
         </div>
 
@@ -133,27 +135,27 @@ export default function AccountClient() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                    Nombre
+                    {t.auth.name}
                   </label>
                   <input
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     className="w-full border-b border-neutral-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-neutral-300"
-                    placeholder="NOMBRE"
+                    placeholder={t.auth.name.toUpperCase()}
                     required={!isLogin}
                   />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                    Apellido
+                    {t.auth.surname}
                   </label>
                   <input
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     className="w-full border-b border-neutral-300 py-2 text-sm focus:border-black focus:outline-none transition-colors bg-transparent placeholder:text-neutral-300"
-                    placeholder="APELLIDO"
+                    placeholder={t.auth.surname.toUpperCase()}
                     required={!isLogin}
                   />
                 </div>
@@ -162,7 +164,7 @@ export default function AccountClient() {
 
             <div className="space-y-1">
               <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                Email
+                {t.auth.email}
               </label>
               <input
                 type="email"
@@ -177,11 +179,11 @@ export default function AccountClient() {
             <div className="space-y-1">
               <div className="flex justify-between items-baseline">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                  Contraseña
+                  {t.auth.password}
                 </label>
                 {isLogin && (
                   <button type="button" className="text-[10px] uppercase text-neutral-400 hover:text-black transition-colors">
-                    ¿Olvidaste tu contraseña?
+                    {t.auth.forgot_password}
                   </button>
                 )}
               </div>
@@ -200,7 +202,7 @@ export default function AccountClient() {
               disabled={loading}
               className="w-full bg-black text-white mt-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Cargando..." : (isLogin ? "Entrar" : "Crear Cuenta")}
+              {loading ? "Cargando..." : (isLogin ? t.auth.submit_login : t.auth.submit_register)}
               {!loading && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
             </button>
           </form>
@@ -208,8 +210,8 @@ export default function AccountClient() {
           {/* Helper Text */}
           <p className="text-[10px] text-neutral-400 text-center leading-relaxed uppercase tracking-wide">
             {isLogin
-              ? "Al iniciar sesión, accedes a tu historial de pedidos y detalles de envío."
-              : "Regístrate para obtener acceso anticipado a lanzamientos y gestionar tus pedidos."}
+              ? t.auth.login_desc
+              : t.auth.register_desc}
           </p>
         </div>
       </div>

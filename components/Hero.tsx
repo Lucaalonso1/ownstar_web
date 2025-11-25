@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Hero() {
+  const { t } = useLanguage();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -143,7 +145,7 @@ export function Hero() {
               {timeLeft.days.toString().padStart(2, "0")}
             </span>
             <span className="text-xs uppercase tracking-widest text-neutral-400">
-              Días
+              {t.hero.days}
             </span>
           </div>
           <div className="flex flex-col">
@@ -151,7 +153,7 @@ export function Hero() {
               {timeLeft.hours.toString().padStart(2, "0")}
             </span>
             <span className="text-xs uppercase tracking-widest text-neutral-400">
-              Horas
+              {t.hero.hours}
             </span>
           </div>
           <div className="flex flex-col">
@@ -159,7 +161,7 @@ export function Hero() {
               {timeLeft.minutes.toString().padStart(2, "0")}
             </span>
             <span className="text-xs uppercase tracking-widest text-neutral-400">
-              Minutos
+              {t.hero.minutes}
             </span>
           </div>
           <div className="flex flex-col">
@@ -167,30 +169,30 @@ export function Hero() {
               {timeLeft.seconds.toString().padStart(2, "0")}
             </span>
             <span className="text-xs uppercase tracking-widest text-neutral-400">
-              Segundos
+              {t.hero.seconds}
             </span>
           </div>
         </div>
 
         <div className="w-full max-w-md space-y-4">
           <p className="text-sm uppercase tracking-wide text-neutral-300">
-            Acceso Anticipado + 10% Descuento Extra
+            {t.hero.early_access}
           </p>
           <form className="flex flex-col gap-2 sm:flex-row">
             <input
               type="email"
-              placeholder="DIRECCIÓN DE EMAIL"
+              placeholder={t.hero.email_placeholder}
               className="flex-1 bg-white/10 border border-white/20 px-4 py-3 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-white backdrop-blur-sm transition-colors uppercase"
             />
             <button
               type="submit"
               className="bg-white text-black px-8 py-3 text-sm font-bold uppercase tracking-wide hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2"
             >
-              Suscribirse
+              {t.hero.subscribe}
             </button>
           </form>
           <p className="text-[10px] text-neutral-500 max-w-xs mx-auto leading-relaxed">
-            Al suscribirte aceptas nuestra Política de Privacidad.
+            {t.hero.privacy_policy}
           </p>
         </div>
       </div>

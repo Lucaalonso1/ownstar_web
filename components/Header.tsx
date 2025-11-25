@@ -6,6 +6,7 @@ import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Collection {
   id: string | number;
@@ -20,6 +21,7 @@ interface HeaderProps {
 
 export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   const { cart } = useCart();
+  const { t, language, setLanguage } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
@@ -87,20 +89,20 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             className="hover:opacity-70 transition-opacity"
             onMouseEnter={() => setIsCollectionsOpen(false)}
           >
-            Tienda
+            {t.header.shop}
           </Link>
           <button
             className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-wide"
             onMouseEnter={() => setIsCollectionsOpen(true)}
           >
-            Colecciones
+            {t.header.collections}
           </button>
           <Link
             href="/about"
             className="hover:opacity-70 transition-opacity"
             onMouseEnter={() => setIsCollectionsOpen(false)}
           >
-            Sobre Nosotros
+            {t.header.about}
           </Link>
         </div>
 
@@ -130,9 +132,12 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         </div>
 
         <div className="flex items-center gap-6">
-          <button className="hover:opacity-70 transition-opacity">
+          <button 
+            onClick={() => setLanguage(language === "es" ? "en" : "es")}
+            className="hover:opacity-70 transition-opacity"
+          >
             <span className="hidden md:inline text-sm font-medium uppercase tracking-wide mr-2">
-              ES
+              {language.toUpperCase()}
             </span>
           </button>
           <Link href="/account" className="hover:opacity-70 transition-opacity">
@@ -222,7 +227,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         )}
       >
         <div className="p-6 flex justify-between items-center border-b border-neutral-100">
-          <h2 className="text-xl font-bold uppercase tracking-tighter">Menu</h2>
+          <h2 className="text-xl font-bold uppercase tracking-tighter">{t.header.menu}</h2>
           <button 
             onClick={() => setIsMobileMenuOpen(false)}
             className="p-2 -mr-2 hover:bg-neutral-100 rounded-full transition-colors"
@@ -237,18 +242,18 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Inicio
+            {t.header.home}
           </Link>
           <Link 
             href="/shop" 
             className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Tienda
+            {t.header.shop}
           </Link>
           
           <div className="space-y-4 pt-4 border-t border-neutral-100">
-            <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">Colecciones</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">{t.header.collections}</span>
             {displayCollections.map((collection) => (
                <div key={collection.id} className="text-base font-medium uppercase tracking-wide text-black">
                   {collection.name}
@@ -261,7 +266,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors pt-4 border-t border-neutral-100"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Sobre Nosotros
+            {t.header.about}
           </Link>
           
           <div className="pt-4 border-t border-neutral-100 space-y-4">
@@ -270,15 +275,21 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
                 className="flex items-center gap-3 text-sm font-medium uppercase tracking-wide hover:text-neutral-500 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
              >
-                <User className="w-5 h-5" /> Mi Cuenta
+                <User className="w-5 h-5" /> {t.header.account}
              </Link>
              <Link 
                 href="/contact"
                 className="flex items-center gap-3 text-sm font-medium uppercase tracking-wide hover:text-neutral-500 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
              >
-                Contacto
+                {t.header.contact}
              </Link>
+             <button 
+                onClick={() => { setLanguage(language === "es" ? "en" : "es"); setIsMobileMenuOpen(false); }}
+                className="flex items-center gap-3 text-sm font-medium uppercase tracking-wide hover:text-neutral-500 transition-colors w-full text-left"
+             >
+                Language: {language.toUpperCase()}
+             </button>
           </div>
         </nav>
       </div>

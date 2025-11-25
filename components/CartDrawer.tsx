@@ -4,9 +4,11 @@ import { X, Minus, Plus, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function CartDrawer() {
   const { cart, isCartOpen, toggleCart, removeFromCart, checkout } = useCart();
+  const { t } = useLanguage();
 
   return (
     <>
@@ -30,7 +32,7 @@ export function CartDrawer() {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-neutral-100">
             <h2 className="text-xl font-bold uppercase tracking-tighter">
-              Tu Cesta ({cart.length})
+              {t.cart.title} ({cart.length})
             </h2>
             <button
               onClick={toggleCart}
@@ -45,7 +47,7 @@ export function CartDrawer() {
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-neutral-400 space-y-4">
                 <ShoppingBag className="w-12 h-12 opacity-20" />
-                <p className="text-sm uppercase tracking-wide">Tu cesta está vacía</p>
+                <p className="text-sm uppercase tracking-wide">{t.cart.empty}</p>
               </div>
             ) : (
               cart.map((item) => (
@@ -75,7 +77,7 @@ export function CartDrawer() {
                         onClick={() => removeFromCart(item.id)}
                         className="text-[10px] uppercase underline text-neutral-400 hover:text-black"
                       >
-                        Eliminar
+                        {t.cart.remove}
                       </button>
                     </div>
                   </div>
@@ -88,7 +90,7 @@ export function CartDrawer() {
           {cart.length > 0 && (
             <div className="p-6 border-t border-neutral-100 bg-neutral-50">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-medium uppercase">Total Estimado</span>
+                <span className="text-sm font-medium uppercase">{t.cart.total}</span>
                 <span className="text-lg font-bold">
                   {cart
                     .reduce(
@@ -103,10 +105,10 @@ export function CartDrawer() {
                 onClick={checkout}
                 className="w-full bg-black text-white py-4 text-sm font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors"
               >
-                Tramitar Pedido
+                {t.cart.checkout}
               </button>
               <p className="text-[10px] text-neutral-400 text-center mt-4">
-                Impuestos incluidos. Envío calculado en el checkout.
+                {t.cart.taxes}
               </p>
             </div>
           )}

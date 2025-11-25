@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Instagram, Twitter, Facebook } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="bg-black text-white pt-20 pb-10 px-6 md:px-12 border-t border-neutral-800 relative z-10">
       <div className="max-w-[1800px] mx-auto">
@@ -17,26 +21,26 @@ export function Footer() {
           {/* Quick Links */}
           <div className="space-y-6">
             <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500">
-              Explorar
+              {t.footer.explore}
             </h3>
             <nav className="flex flex-col gap-4">
               <Link
                 href="/shop"
                 className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
               >
-                Tienda
+                {t.header.shop}
               </Link>
               <Link
                 href="/about"
                 className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
               >
-                Sobre Nosotros
+                {t.header.about}
               </Link>
               <Link
                 href="/account"
                 className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
               >
-                Mi Cuenta
+                {t.header.account}
               </Link>
             </nav>
           </div>
@@ -44,32 +48,32 @@ export function Footer() {
           {/* Support */}
           <div className="space-y-6">
             <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500">
-              Ayuda
+              {t.footer.help}
             </h3>
             <nav className="flex flex-col gap-4">
               <Link
                 href="/faq"
                 className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
               >
-                Preguntas Frecuentes
+                {t.footer.faq}
               </Link>
               <Link
                 href="/shipping"
                 className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
               >
-                Envíos y Devoluciones
+                {t.footer.shipping}
               </Link>
               <Link
                 href="/contact"
                 className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
               >
-                Contacto
+                {t.footer.contact}
               </Link>
               <Link
                 href="/terms"
                 className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
               >
-                Términos y Condiciones
+                {t.footer.terms}
               </Link>
             </nav>
           </div>
@@ -77,22 +81,22 @@ export function Footer() {
           {/* Newsletter */}
           <div className="space-y-6">
             <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500">
-              Newsletter
+              {t.footer.newsletter}
             </h3>
             <p className="text-sm text-neutral-400">
-              Suscríbete para recibir acceso anticipado a nuevos lanzamientos.
+              {t.footer.newsletter_desc}
             </p>
             <form className="space-y-4">
               <input
                 type="email"
-                placeholder="TU EMAIL"
+                placeholder={t.hero.email_placeholder}
                 className="w-full bg-transparent border-b border-neutral-700 py-2 text-sm focus:border-white focus:outline-none transition-colors placeholder:text-neutral-600 uppercase"
               />
               <button
                 type="submit"
                 className="text-xs font-bold uppercase tracking-widest hover:text-neutral-400 transition-colors"
               >
-                Suscribirse →
+                {t.footer.subscribe_btn}
               </button>
             </form>
           </div>
@@ -101,7 +105,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-neutral-900 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-[10px] text-neutral-600 uppercase tracking-wider">
-            © {new Date().getFullYear()} Ownstar. Todos los derechos reservados.
+            © {new Date().getFullYear()} Ownstar. {t.footer.rights}
           </p>
           
           {/* Socials */}

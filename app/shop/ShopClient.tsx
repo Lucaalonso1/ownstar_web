@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Product {
   id: string;
@@ -22,6 +23,7 @@ interface ShopClientProps {
 }
 
 export default function ShopClient({ products, hideHero = false }: ShopClientProps & { hideHero?: boolean }) {
+  const { t, language } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   const [activeProducts, setActiveProducts] = useState(products);
   
@@ -110,7 +112,7 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
       {!hideHero && (
       <div className="sticky top-[54px] z-40 bg-white/80 backdrop-blur-md border-b border-neutral-100 py-4 px-6 md:px-12 flex justify-between items-center mt-0">
          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
-            {activeProducts.length} Productos
+            {activeProducts.length} {t.shop.products}
          </span>
          
          <div className="flex gap-6 text-xs font-bold uppercase tracking-widest relative">
@@ -120,15 +122,15 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
                  onClick={() => { setShowFilter(!showFilter); setShowSort(false); }}
                  className={cn("hover:text-neutral-500 transition-colors", filterOption !== 'all' && "text-black underline")}
                >
-                 Filtrar
+                 {t.shop.filter}
                </button>
                
                {showFilter && (
                  <div className="absolute top-full right-0 mt-4 w-48 bg-white border border-neutral-100 shadow-xl p-2 flex flex-col gap-1 z-50">
                    {[
-                     { label: "Todos", value: "all" },
-                     { label: "Disponibles", value: "available" },
-                     { label: "Nuevos", value: "new" }
+                     { label: t.shop.filters.all, value: "all" },
+                     { label: t.shop.filters.available, value: "available" },
+                     { label: t.shop.filters.new, value: "new" }
                    ].map((opt) => (
                      <button
                        key={opt.value}
@@ -151,16 +153,16 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
                  onClick={() => { setShowSort(!showSort); setShowFilter(false); }}
                  className={cn("hover:text-neutral-500 transition-colors", sortOption !== 'default' && "text-black underline")}
                >
-                 Ordenar
+                 {t.shop.sort}
                </button>
 
                {showSort && (
                  <div className="absolute top-full right-0 mt-4 w-48 bg-white border border-neutral-100 shadow-xl p-2 flex flex-col gap-1 z-50">
                    {[
-                     { label: "Relevancia", value: "default" },
-                     { label: "Lo más nuevo", value: "newest" },
-                     { label: "Precio: Bajo a Alto", value: "price-asc" },
-                     { label: "Precio: Alto a Bajo", value: "price-desc" }
+                     { label: t.shop.sorting.relevance, value: "default" },
+                     { label: t.shop.sorting.newest, value: "newest" },
+                     { label: t.shop.sorting.price_asc, value: "price-asc" },
+                     { label: t.shop.sorting.price_desc, value: "price-desc" }
                    ].map((opt) => (
                      <button
                        key={opt.value}
@@ -203,12 +205,12 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
                     <div className="absolute top-4 left-4 z-20 flex flex-col gap-2 items-start">
                         {product.isAvailable === false && (
                             <span className="bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-black">
-                            Sold Out
+                            {language === "es" ? t.product.sold_out_es : t.product.sold_out}
                             </span>
                         )}
                         {product.isNew && product.isAvailable !== false && (
                              <span className="bg-black text-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider">
-                             New In
+                             {t.product.new_in}
                              </span>
                         )}
                     </div>
@@ -236,7 +238,7 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
                             {product.name}
                         </h3>
                         <p className="text-xs text-neutral-500 mt-1">
-                            {product.isAvailable === false ? "Agotado" : "Disponible"}
+                            {product.isAvailable === false ? (language === "es" ? t.product.sold_out_es : t.product.sold_out) : t.shop.filters.available}
                         </p>
                     </div>
                     <span className="text-sm font-medium">
@@ -249,7 +251,7 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
 
         {activeProducts.length === 0 && (
             <div className="h-[50vh] flex items-center justify-center text-neutral-400 uppercase tracking-widest text-sm">
-                No se encontraron productos
+                {t.shop.no_products}
             </div>
         )}
       </section>
