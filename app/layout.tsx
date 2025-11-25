@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 import { Marquee } from "@/components/Marquee";
+import Preloader from "@/components/Preloader";
 
 export const metadata: Metadata = {
   title: "OWNSTAR | Modern Streetwear",
@@ -40,6 +41,7 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <CartProvider>
+            <Preloader />
             <Marquee className="fixed top-0 left-0 w-full z-[100]" />
             <CartDrawer />
             {children}
