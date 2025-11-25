@@ -16,6 +16,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import { Marquee } from "@/components/Marquee";
+
 export const metadata: Metadata = {
   title: "OWNSTAR | Modern Streetwear",
   description: "Minimalist fashion for the modern generation.",
@@ -36,8 +38,9 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <CartProvider>
+            <Marquee className="fixed top-0 left-0 w-full z-[100]" />
             <CartDrawer />
-        {children}
+            {children}
             <Footer />
           </CartProvider>
         </LanguageProvider>

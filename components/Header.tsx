@@ -68,7 +68,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 w-full z-[60] transition-all duration-300",
+        "fixed top-[15px] md:top-[25px] left-0 w-full z-[60] transition-all duration-300",
         isWhiteBackground
           ? "bg-white text-black shadow-sm"
           : "bg-transparent text-white"
@@ -85,15 +85,15 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
           "flex items-center justify-between px-6 transition-all duration-300 relative z-[60] py-2"
         )}
       >
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium tracking-wide uppercase">
+        <div className="hidden md:flex items-center gap-6 text-xs font-medium tracking-widest uppercase">
           <button
-            className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-wide py-4"
+            className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-widest py-4"
             onMouseEnter={() => { setIsShopOpen(true); setIsCollectionsOpen(false); }}
           >
             {t.header.shop}
           </button>
           <button
-            className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-wide py-4"
+            className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-widest py-4"
             onMouseEnter={() => { setIsCollectionsOpen(true); setIsShopOpen(false); }}
           >
             {t.header.collections}
@@ -137,7 +137,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             onClick={() => setLanguage(language === "es" ? "en" : "es")}
             className="hover:opacity-70 transition-opacity"
           >
-            <span className="hidden md:inline text-sm font-medium uppercase tracking-wide mr-2">
+            <span className="hidden md:inline text-xs font-medium uppercase tracking-widest mr-2">
               {language.toUpperCase()}
             </span>
           </button>
@@ -187,13 +187,13 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
                  {t.header.clothing}
                </h3>
                <div className="flex flex-col gap-4">
-                  <Link href="/shop" className="text-sm font-medium uppercase tracking-wider text-black hover:text-neutral-500 transition-colors w-fit">
+                  <Link href="/shop" className="text-xs font-medium uppercase tracking-widest text-black hover:text-neutral-500 transition-colors w-fit">
                     {t.header.view_all}
                   </Link>
-                  <Link href="/shop?category=t-shirt" className="text-sm font-medium uppercase tracking-wider text-black hover:text-neutral-500 transition-colors w-fit">
+                  <Link href="/shop?category=t-shirt" className="text-xs font-medium uppercase tracking-widest text-black hover:text-neutral-500 transition-colors w-fit">
                     {t.header.t_shirts}
                   </Link>
-                  <Link href="/shop?category=hoodie" className="text-sm font-medium uppercase tracking-wider text-black hover:text-neutral-500 transition-colors w-fit">
+                  <Link href="/shop?category=hoodie" className="text-xs font-medium uppercase tracking-widest text-black hover:text-neutral-500 transition-colors w-fit">
                     {t.header.hoodies}
                   </Link>
                </div>
@@ -236,7 +236,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
                   <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
                 </div>
                 <div className="text-center">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-black">
+                  <h3 className="text-xs font-medium uppercase tracking-widest text-black">
                     {collection.name}
                   </h3>
                 </div>
