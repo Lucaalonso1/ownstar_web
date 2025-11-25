@@ -79,3 +79,130 @@ export async function getProductByHandle(handle: string) {
     return null;
   }
 }
+
+// --- Storefront API (for Customer Auth) ---
+
+const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+
+const storefrontHeaders = {
+  "X-Shopify-Storefront-Access-Token": storefrontAccessToken || "",
+  "Content-Type": "application/json",
+};
+
+async function storefrontRequest(query: string, variables = {}) {
+  if (!storefrontAccessToken) {
+    throw new Error("Falta configurar NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN en .env.local");
+  }
+
+  const URL = `https://${domain}/api/2024-01/graphql.json`;
+
+  const options = {
+    method: "POST",
+    headers: storefrontHeaders,
+    body: JSON.stringify({ query, variables }),
+  };
+
+  try {
+    const response = await fetch(URL, options);
+    const data = await response.json();
+
+    if (data.errors) {
+      throw new Error(data.errors[0].message);
+    }
+
+    return data.data;
+  } catch (error) {
+    console.error("Error in Shopify Storefront request:", error);
+    throw error;
+  }
+}
+
+export async function createCustomer(email: string, password: string, firstName: string, lastName: string) {
+  const mutation = `
+    mutation customerCreate($input: CustomerCreateInput!) {
+      customerCreate(input: $input) {
+        customer {
+          id
+          email
+        }
+        customerUserErrors {
+          code
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      email,
+      password,
+      firstName,
+      lastName,
+    },
+  };
+
+  const data = await storefrontRequest(mutation, variables);
+  return data.customerCreate;
+}
+
+export async function createCustomerAccessToken(email: string, password: string) {
+  const mutation = `
+    mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+      customerAccessTokenCreate(input: $input) {
+        customerAccessToken {
+          accessToken
+          expiresAt
+        }
+        customerUserErrors {
+          code
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      email,
+      password,
+    },
+  };
+
+  const data = await storefrontRequest(mutation, variables);
+  return data.customerAccessTokenCreate;
+}
+
+export async function getCustomer(accessToken: string) {
+  const query = `
+    query {
+      customer(customerAccessToken: "${accessToken}") {
+        id
+        firstName
+        lastName
+        email
+        orders(first: 10) {
+          edges {
+            node {
+              id
+              orderNumber
+              totalPrice {
+                amount
+                currencyCode
+              }
+              processedAt
+              financialStatus
+              fulfillmentStatus
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await storefrontRequest(query);
+  return data.customer;
+}
+
