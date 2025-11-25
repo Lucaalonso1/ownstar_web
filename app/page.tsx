@@ -3,11 +3,36 @@ import { Hero } from "@/components/Hero";
 import { ProductGrid } from "@/components/ProductGrid";
 import { getProductsInCollection, getCollections } from "@/lib/shopify";
 
+interface ShopifyImage {
+  src: string;
+}
+
+interface ShopifyVariant {
+  price: string;
+}
+
+interface ShopifyProduct {
+  id: number;
+  title: string;
+  handle: string;
+  variants: ShopifyVariant[];
+  image?: ShopifyImage;
+  images: ShopifyImage[];
+  tags?: string;
+}
+
+interface ShopifyCollection {
+  id: number;
+  title: string;
+  image?: ShopifyImage;
+}
+
 // Fallback dummy data in case Shopify is not configured yet
 const dummyProducts = [
   {
     id: "1",
     name: "Desert Puffer Jacket",
+    handle: "desert-puffer-jacket",
     price: "199,00 EUR",
     image:
       "https://images.unsplash.com/photo-1544923246-7740a90c230d?q=80&w=1000&auto=format&fit=crop",
@@ -18,7 +43,7 @@ const dummyProducts = [
 
 export default async function Home() {
   let products = dummyProducts;
-  let collectionsData: any[] = [];
+  let collectionsData: { id: number; name: string; image: string }[] = [];
 
   // Try to fetch from Shopify if env vars are present
   if (
@@ -34,10 +59,11 @@ export default async function Home() {
 
       // Process Products
       if (shopifyProducts.length > 0) {
-        products = shopifyProducts.map((p: any) => {
+        products = shopifyProducts.map((p: ShopifyProduct) => {
           return {
             id: p.id.toString(),
             name: p.title,
+            handle: p.handle,
             price: `${p.variants[0]?.price || "0.00"} EUR`,
             image: p.image?.src || p.images[0]?.src || "",
             colors: ["#000"],
@@ -48,7 +74,7 @@ export default async function Home() {
 
       // Process Collections for Header
       if (shopifyCollections.length > 0) {
-        collectionsData = shopifyCollections.map((c: any) => ({
+        collectionsData = shopifyCollections.map((c: ShopifyCollection) => ({
           id: c.id,
           name: c.title,
           image: c.image?.src || "", // Collections might not have images, header handles empty string check

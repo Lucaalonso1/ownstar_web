@@ -55,3 +55,27 @@ export async function getCollections() {
     return [];
   }
 }
+
+export async function getProductByHandle(handle: string) {
+  const URL = `https://${domain}/admin/api/2024-01/products.json?handle=${handle}`;
+
+  const options = {
+    method: "GET",
+    headers,
+  };
+
+  try {
+    const response = await fetch(URL, options);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching product: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    // The API returns an array of products matching the handle (should be 1)
+    return data.products[0] || null;
+  } catch (error) {
+    console.error("Error in Shopify fetch product by handle:", error);
+    return null;
+  }
+}

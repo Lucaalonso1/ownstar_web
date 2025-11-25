@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Plus } from "lucide-react";
 
 interface Product {
   id: string;
   name: string;
+  handle: string;
   price: string;
   image: string;
   colors: string[];
@@ -21,8 +23,9 @@ export function ProductGrid({ products }: ProductGridProps) {
     <section className="bg-white w-full min-h-screen px-4 py-24 md:px-8 relative z-10">
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-12">
         {products.map((product) => (
-          <div
+          <Link
             key={product.id}
+            href={`/product/${product.handle}`}
             className="group flex flex-col gap-3 cursor-pointer"
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100">
@@ -66,7 +69,7 @@ export function ProductGrid({ products }: ProductGridProps) {
                   ))}
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
