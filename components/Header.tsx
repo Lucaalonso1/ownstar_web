@@ -24,6 +24,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   const { t, language, setLanguage } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
+  const [isShopOpen, setIsShopOpen] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -62,7 +63,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         ];
 
   const isWhiteBackground =
-    forceWhite || isScrolled || isCollectionsOpen || isHeaderHovered;
+    forceWhite || isScrolled || isCollectionsOpen || isShopOpen || isHeaderHovered;
 
   return (
     <header
@@ -75,6 +76,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
       onMouseEnter={() => setIsHeaderHovered(true)}
       onMouseLeave={() => {
         setIsCollectionsOpen(false);
+        setIsShopOpen(false);
         setIsHeaderHovered(false);
       }}
     >
@@ -84,23 +86,22 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         )}
       >
         <div className="hidden md:flex items-center gap-6 text-sm font-medium tracking-wide uppercase">
-          <Link
-            href="/shop"
-            className="hover:opacity-70 transition-opacity"
-            onMouseEnter={() => setIsCollectionsOpen(false)}
+          <button
+            className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-wide py-4"
+            onMouseEnter={() => { setIsShopOpen(true); setIsCollectionsOpen(false); }}
           >
             {t.header.shop}
-          </Link>
+          </button>
           <button
-            className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-wide"
-            onMouseEnter={() => setIsCollectionsOpen(true)}
+            className="hover:opacity-70 transition-opacity focus:outline-none font-medium uppercase tracking-wide py-4"
+            onMouseEnter={() => { setIsCollectionsOpen(true); setIsShopOpen(false); }}
           >
             {t.header.collections}
           </button>
           <Link
             href="/about"
-            className="hover:opacity-70 transition-opacity"
-            onMouseEnter={() => setIsCollectionsOpen(false)}
+            className="hover:opacity-70 transition-opacity py-4"
+            onMouseEnter={() => { setIsCollectionsOpen(false); setIsShopOpen(false); }}
           >
             {t.header.about}
           </Link>
@@ -164,6 +165,40 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             </span>
             )}
           </Link>
+        </div>
+      </div>
+
+      {/* Shop Dropdown (Mega Menu style) */}
+      <div
+        className={cn(
+          "absolute top-full left-0 w-full bg-white border-t border-gray-100 overflow-hidden transition-all duration-500 ease-in-out hidden md:block",
+          isShopOpen
+            ? "max-h-[300px] opacity-100"
+            : "max-h-0 opacity-0"
+        )}
+        onMouseEnter={() => setIsShopOpen(true)}
+        onMouseLeave={() => setIsShopOpen(false)}
+      >
+        <div className="w-full px-6 py-12">
+          <div className="max-w-[1600px] mx-auto flex gap-24">
+            {/* Column 1: Clothing */}
+            <div className="flex flex-col gap-6">
+               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">
+                 {t.header.clothing}
+               </h3>
+               <div className="flex flex-col gap-4">
+                  <Link href="/shop" className="text-sm font-medium uppercase tracking-wider text-black hover:text-neutral-500 transition-colors w-fit">
+                    {t.header.view_all}
+                  </Link>
+                  <Link href="/shop?category=t-shirt" className="text-sm font-medium uppercase tracking-wider text-black hover:text-neutral-500 transition-colors w-fit">
+                    {t.header.t_shirts}
+                  </Link>
+                  <Link href="/shop?category=hoodie" className="text-sm font-medium uppercase tracking-wider text-black hover:text-neutral-500 transition-colors w-fit">
+                    {t.header.hoodies}
+                  </Link>
+               </div>
+            </div>
+          </div>
         </div>
       </div>
 

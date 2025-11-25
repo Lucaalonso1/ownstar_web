@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
@@ -25,14 +26,22 @@ interface ShopClientProps {
 
 export default function ShopClient({ products, hideHero = false }: ShopClientProps & { hideHero?: boolean }) {
   const { t, language } = useLanguage();
+  const searchParams = useSearchParams();
   const [isVisible, setIsVisible] = useState(false);
   const [activeProducts, setActiveProducts] = useState(products);
   
   // Filter & Sort States
   const [showSort, setShowSort] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [sortOption, setSortOption] = useState("default"); // default, price-asc, price-desc, newest
-  const [filterOption, setFilterOption] = useState("all"); // all, available, new
+  const [sortOption, setSortOption] = useState("default");
+  const [filterOption, setFilterOption] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+
+  // Read category from URL on mount and change
+  useEffect(() => {
+    const category = searchParams.get("category");
+    setCategoryFilter(category);
+  }, [searchParams]);
 
   // Trigger intro animation on mount
   useEffect(() => {
@@ -42,6 +51,22 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
   // Logic for Sorting and Filtering
   useEffect(() => {
     let filtered = [...products];
+
+    // 0. Category Filter (from URL)
+    if (categoryFilter) {
+      if (categoryFilter === "t-shirt") {
+         filtered = filtered.filter(p => 
+            p.name.toLowerCase().includes("t-shirt") || 
+            p.name.toLowerCase().includes("shirt") ||
+            p.name.toLowerCase().includes("camiseta")
+         );
+      } else if (categoryFilter === "hoodie") {
+         filtered = filtered.filter(p => 
+            p.name.toLowerCase().includes("hoodie") || 
+            p.name.toLowerCase().includes("sudadera")
+         );
+      }
+    }
 
     // 1. Filter
     if (filterOption === "available") {
@@ -64,12 +89,11 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
         return priceB - priceA;
       });
     } else if (sortOption === "newest") {
-      // Assuming isNew is the only "newness" indicator we have on the client for now
       filtered.sort((a, b) => (a.isNew === b.isNew ? 0 : a.isNew ? -1 : 1));
     }
 
     setActiveProducts(filtered);
-  }, [products, sortOption, filterOption]);
+  }, [products, sortOption, filterOption, categoryFilter]);
 
   // Close menus when clicking outside (simple version using backdrop)
   const closeMenus = () => {

@@ -9,6 +9,10 @@ const translations = {
     header: {
       shop: "Tienda",
       collections: "Colecciones",
+      clothing: "Ropa",
+      t_shirts: "Camisetas",
+      hoodies: "Sudaderas",
+      view_all: "Ver Todo",
       about: "Sobre Nosotros",
       account: "Mi Cuenta",
       contact: "Contacto",
@@ -89,6 +93,10 @@ const translations = {
     header: {
       shop: "Shop",
       collections: "Collections",
+      clothing: "Clothing",
+      t_shirts: "T-Shirts",
+      hoodies: "Hoodies",
+      view_all: "View All",
       about: "About Us",
       account: "My Account",
       contact: "Contact",
