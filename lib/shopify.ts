@@ -1,4 +1,4 @@
-const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
+const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.replace(/^https?:\/\//, "").replace(/\/$/, "");
 const adminAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_ADMIN_ACCESS_TOKEN;
 
 const headers = {
@@ -94,7 +94,8 @@ async function storefrontRequest(query: string, variables = {}) {
     throw new Error("Falta configurar NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN en .env.local");
   }
 
-  const URL = `https://${domain}/api/2024-01/graphql.json`;
+    const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.replace(/^https?:\/\//, "").replace(/\/$/, "");
+    const URL = `https://${domain}/api/2024-01/graphql.json`;
 
   const options = {
     method: "POST",
@@ -173,6 +174,45 @@ export async function createCustomerAccessToken(email: string, password: string)
 
   const data = await storefrontRequest(mutation, variables);
   return data.customerAccessTokenCreate;
+}
+
+export async function createCheckoutUrl(items: { id: string; quantity: number }[]) {
+  const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  
+  const mutation = `
+    mutation cartCreate($input: CartInput) {
+      cartCreate(input: $input) {
+        cart {
+          checkoutUrl
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const lines = items.map((item) => ({
+    merchandiseId: item.id.includes("gid://")
+      ? item.id
+      : `gid://shopify/ProductVariant/${item.id}`,
+    quantity: item.quantity,
+  }));
+
+  const variables = {
+    input: {
+      lines,
+    },
+  };
+
+  const data = await storefrontRequest(mutation, variables);
+
+  if (data.cartCreate?.userErrors?.length > 0) {
+    throw new Error(data.cartCreate.userErrors[0].message);
+  }
+
+  return data.cartCreate?.cart?.checkoutUrl;
 }
 
 export async function getCustomer(accessToken: string) {

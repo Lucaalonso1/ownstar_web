@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createCheckoutUrl } from "@/lib/shopify";
 
 interface CartItem {
   id: string; // Variant ID
@@ -72,17 +73,57 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const toggleCart = () => setIsCartOpen(!isCartOpen);
 
-  const checkout = () => {
-    // Create Shopify Cart Permalink
-    // Format: https://your-store.myshopify.com/cart/variant_id:quantity,variant_id:quantity
-    const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
-    const itemsString = cart
-      .map((item) => `${item.id}:${item.quantity}`)
+  const checkout = async () => {
+    // DEBUG: Verificar si se está ejecutando la nueva versión
+    console.log("Checkout function called");
+    
+    const validItems = cart.filter((item) => item.id && item.quantity > 0);
+
+    if (validItems.length === 0) {
+      alert("El carrito está vacío o tiene ítems inválidos");
+      return;
+    }
+
+    // 1. Intentar Checkout vía API Storefront
+    try {
+      console.log("Intentando crear checkout vía API...");
+      const url = await createCheckoutUrl(validItems);
+      
+      if (url) {
+        console.log("URL de API recibida:", url);
+        window.location.href = url;
+        return;
+      }
+    } catch (error) {
+      console.error("Fallo en API checkout:", error);
+      // Continuamos al fallback
+    }
+
+    // 2. Fallback: Checkout vía Permalink (URL directa)
+    let domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
+    
+    if (!domain) {
+      console.error("Shopify Domain no configurado");
+      return;
+    }
+
+    // Limpieza del dominio
+    domain = domain.trim().replace(/^https?:\/\//, "").replace(/\/$/, "");
+    
+    // Construir URL del permalink
+    const itemsString = validItems
+      .map((item) => {
+        const id = item.id.replace("gid://shopify/ProductVariant/", "");
+        return `${id}:${item.quantity}`;
+      })
       .join(",");
     
-    if (itemsString) {
-      window.location.href = `https://${domain}/cart/${itemsString}`;
-    }
+    // Intentamos usar la ruta directa a Shopify.
+    // NOTA: Si Shopify tiene ownstar.es como dominio principal, redirigirá allí.
+    const permalinkUrl = `https://${domain}/cart/${itemsString}`;
+    
+    console.log("Redireccionando a Permalink:", permalinkUrl);
+    window.location.href = permalinkUrl;
   };
 
   return (
