@@ -69,9 +69,9 @@ export default function ProductClient({ product }: ProductClientProps) {
 
         {/* Product Info (Right - Sticky) */}
         <div className="lg:col-span-4 relative">
-          <div className="sticky top-32 space-y-8">
+          <div className="sticky top-32 flex flex-col gap-8">
             {/* Header */}
-            <div className="space-y-2 border-b border-black/10 pb-6">
+            <div className="space-y-2 border-b border-black/10 pb-6 order-1">
               <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tighter leading-[0.9]">
                 {product.title}
               </h1>
@@ -89,12 +89,12 @@ export default function ProductClient({ product }: ProductClientProps) {
 
             {/* Description */}
             <div 
-              className="text-sm leading-relaxed text-neutral-600 prose prose-sm max-w-none"
+              className="text-sm leading-relaxed text-neutral-600 prose prose-sm max-w-none order-4 md:order-2"
               dangerouslySetInnerHTML={{ __html: product.body_html }} 
             />
 
             {/* Variants / Sizes */}
-            <div className="space-y-4">
+            <div className="space-y-4 order-2 md:order-3">
               <span className="text-xs font-bold uppercase tracking-wide text-neutral-400">Select Option</span>
               <div className="flex flex-wrap gap-2">
                 {product.variants.map((variant: any) => (
@@ -117,7 +117,7 @@ export default function ProductClient({ product }: ProductClientProps) {
             </div>
 
             {/* Action Buttons */}
-            <div className="space-y-4 pt-4">
+            <div className="space-y-4 pt-4 order-3 md:order-4">
               {isAvailable ? (
                 <button
                   onClick={handleAddToCart}
