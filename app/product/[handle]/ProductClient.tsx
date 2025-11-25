@@ -39,12 +39,12 @@ export default function ProductClient({ product }: ProductClientProps) {
 
   return (
     <main className="pt-24 pb-10 px-4 md:px-8 max-w-[1800px] mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
         {/* Gallery Section (Left) */}
-        <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="lg:col-span-8 flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 gap-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible">
           {images.length > 0 ? (
             images.map((img: any, index: number) => (
-              <div key={img.id} className="relative aspect-[3/4] bg-neutral-100 overflow-hidden">
+              <div key={img.id} className="relative aspect-[3/4] bg-neutral-100 overflow-hidden shrink-0 w-[85vw] md:w-auto snap-center">
                 {index === 0 && !isAvailable && (
                   <span className="absolute top-4 left-4 bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-black z-10">
                     Sold Out
@@ -60,7 +60,7 @@ export default function ProductClient({ product }: ProductClientProps) {
               </div>
             ))
           ) : (
-            <div className="relative aspect-[3/4] bg-neutral-100 overflow-hidden">
+            <div className="relative aspect-[3/4] bg-neutral-100 overflow-hidden w-[85vw] md:w-auto">
                {/* Fallback image */}
                <div className="w-full h-full flex items-center justify-center text-neutral-300">No Image</div>
             </div>
@@ -75,7 +75,16 @@ export default function ProductClient({ product }: ProductClientProps) {
               <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tighter leading-[0.9]">
                 {product.title}
               </h1>
-              <p className="text-xl font-medium">{selectedVariant.price} EUR</p>
+              <div className="flex items-baseline gap-3">
+                {selectedVariant.compare_at_price && (
+                  <span className="text-lg text-neutral-400 line-through decoration-neutral-400">
+                    {selectedVariant.compare_at_price} EUR
+                  </span>
+                )}
+                <p className={cn("text-xl font-medium", selectedVariant.compare_at_price ? "text-red-600" : "text-black")}>
+                  {selectedVariant.price} EUR
+                </p>
+              </div>
             </div>
 
             {/* Description */}

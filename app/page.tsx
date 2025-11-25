@@ -9,6 +9,7 @@ interface ShopifyImage {
 
 interface ShopifyVariant {
   price: string;
+  compare_at_price: string | null;
   inventory_quantity: number;
 }
 
@@ -64,12 +65,14 @@ export default async function Home() {
         products = shopifyProducts.map((p: ShopifyProduct) => {
           const totalInventory = p.variants.reduce((acc, v) => acc + (v.inventory_quantity || 0), 0);
           const isAvailable = totalInventory > 0;
+          const firstVariant = p.variants[0];
 
           return {
             id: p.id.toString(),
             name: p.title,
             handle: p.handle,
-            price: `${p.variants[0]?.price || "0.00"} EUR`,
+            price: `${firstVariant?.price || "0.00"} EUR`,
+            compareAtPrice: firstVariant?.compare_at_price ? `${firstVariant.compare_at_price} EUR` : null,
             image: p.image?.src || p.images[0]?.src || "",
             secondImage: p.images[1]?.src || null,
             colors: ["#000"],

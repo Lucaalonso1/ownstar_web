@@ -23,6 +23,8 @@ export const metadata: Metadata = {
   description: "Minimalist fashion for the modern generation.",
   icons: {
     icon: "/logo-ownstar.png",
+    shortcut: "/logo-ownstar.png",
+    apple: "/logo-ownstar.png",
   },
 };
 

@@ -3,12 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Product {
   id: string;
   name: string;
   handle: string;
   price: string;
+  compareAtPrice?: string | null;
   image: string;
   secondImage?: string | null;
   colors: string[];
@@ -71,9 +73,22 @@ export function ProductGrid({ products }: ProductGridProps) {
               <h3 className="text-xs font-bold uppercase tracking-wide text-black truncate pr-2">
                 {product.name}
               </h3>
-              <p className="text-xs text-neutral-600 font-medium">
-                {product.price}
-              </p>
+              <div className="flex items-center gap-2">
+                {product.compareAtPrice ? (
+                    <>
+                        <span className="text-xs text-neutral-400 line-through decoration-neutral-400">
+                            {product.compareAtPrice}
+                        </span>
+                        <span className="text-xs font-bold text-red-600">
+                            {product.price}
+                        </span>
+                    </>
+                ) : (
+                    <span className="text-xs text-neutral-600 font-medium">
+                        {product.price}
+                    </span>
+                )}
+              </div>
 
               {/* Color Dots (Static for now as fetching variants is more complex, can be added later) */}
               <div className="flex gap-1 pt-1">
