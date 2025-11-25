@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Search, ShoppingBag, User, Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
 
 interface Collection {
   id: string | number;
@@ -18,9 +19,12 @@ interface HeaderProps {
 }
 
 export function Header({ collections = [], forceWhite = false }: HeaderProps) {
+  const { cart } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -136,16 +140,18 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             className="hover:opacity-70 transition-opacity relative"
           >
             <ShoppingBag className="w-6 h-6" />
-            <span
-              className={cn(
-                "absolute -top-2 -right-2 text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full transition-colors duration-300",
-                isWhiteBackground
-                  ? "bg-black text-white"
-                  : "bg-white text-black"
-              )}
-            >
-              0
-            </span>
+            {totalItems > 0 && (
+              <span
+                className={cn(
+                  "absolute -top-2 -right-2 text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full transition-colors duration-300",
+                  isWhiteBackground
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                )}
+              >
+                {totalItems}
+              </span>
+            )}
           </Link>
         </div>
       </div>
