@@ -9,6 +9,7 @@ interface ShopifyImage {
 
 interface ShopifyVariant {
   price: string;
+  inventory_quantity: number;
 }
 
 interface ShopifyProduct {
@@ -38,6 +39,7 @@ const dummyProducts = [
       "https://images.unsplash.com/photo-1544923246-7740a90c230d?q=80&w=1000&auto=format&fit=crop",
     colors: ["#4a5d23", "#e5e5e5"],
     isNew: true,
+    isAvailable: true,
   },
 ];
 
@@ -60,6 +62,9 @@ export default async function Home() {
       // Process Products
       if (shopifyProducts.length > 0) {
         products = shopifyProducts.map((p: ShopifyProduct) => {
+          const totalInventory = p.variants.reduce((acc, v) => acc + (v.inventory_quantity || 0), 0);
+          const isAvailable = totalInventory > 0;
+
           return {
             id: p.id.toString(),
             name: p.title,
@@ -68,7 +73,14 @@ export default async function Home() {
             image: p.image?.src || p.images[0]?.src || "",
             colors: ["#000"],
             isNew: p.tags?.includes("new") || false,
+            isAvailable,
           };
+        });
+
+        // Sort: Available first, then Sold Out
+        products.sort((a, b) => {
+          if (a.isAvailable === b.isAvailable) return 0;
+          return a.isAvailable ? -1 : 1;
         });
       }
 

@@ -12,6 +12,7 @@ interface Product {
   image: string;
   colors: string[];
   isNew: boolean;
+  isAvailable?: boolean;
 }
 
 interface ProductGridProps {
@@ -29,8 +30,15 @@ export function ProductGrid({ products }: ProductGridProps) {
             className="group flex flex-col gap-3 cursor-pointer"
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100">
+              {/* Sold Out Badge */}
+              {product.isAvailable === false && (
+                <span className="absolute top-2 left-2 bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-black z-20">
+                  Sold Out
+                </span>
+              )}
+
               {/* New Badge */}
-              {product.isNew && (
+              {product.isNew && product.isAvailable !== false && (
                 <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-black z-10">
                   New In
                 </span>

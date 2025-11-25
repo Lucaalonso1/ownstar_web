@@ -43,8 +43,13 @@ export default function ProductClient({ product }: ProductClientProps) {
         {/* Gallery Section (Left) */}
         <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           {images.length > 0 ? (
-            images.map((img: any) => (
+            images.map((img: any, index: number) => (
               <div key={img.id} className="relative aspect-[3/4] bg-neutral-100 overflow-hidden">
+                {index === 0 && !isAvailable && (
+                  <span className="absolute top-4 left-4 bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-black z-10">
+                    Sold Out
+                  </span>
+                )}
                 <Image
                   src={img.src}
                   alt={img.alt || product.title}
