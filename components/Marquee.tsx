@@ -9,7 +9,7 @@ interface MarqueeProps {
 }
 
 export function Marquee({ 
-  text = "REDEFINING STREETWEAR                WORLDWIDE SHIPPING                PREMIUM QUALITY                ", 
+  text = "REDEFINING STREETWEAR                25% DISCOUNTS                PREMIUM QUALITY                ", 
   className,
   reverse = false
 }: MarqueeProps) {
