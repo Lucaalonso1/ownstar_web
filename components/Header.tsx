@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ShoppingBag, User, Menu } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
@@ -23,6 +23,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -104,7 +105,12 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         </div>
 
         <div className="md:hidden">
-          <Menu className="w-6 h-6" />
+          <button 
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="p-2 -ml-2 hover:opacity-70 transition-opacity"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
 
         <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -159,7 +165,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
       {/* Collections Dropdown */}
       <div
         className={cn(
-          "absolute top-full left-0 w-full bg-white border-t border-gray-100 overflow-hidden transition-all duration-500 ease-in-out",
+          "absolute top-full left-0 w-full bg-white border-t border-gray-100 overflow-hidden transition-all duration-500 ease-in-out hidden md:block",
           isCollectionsOpen
             ? "max-h-[500px] opacity-100"
             : "max-h-0 opacity-0"
@@ -198,6 +204,83 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Mobile Menu Drawer */}
+      <div
+        className={cn(
+          "fixed inset-0 bg-black/50 z-[70] transition-opacity duration-300 md:hidden",
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      <div
+        className={cn(
+          "fixed top-0 left-0 h-full w-[300px] bg-white text-black z-[80] shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] md:hidden flex flex-col",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <div className="p-6 flex justify-between items-center border-b border-neutral-100">
+          <h2 className="text-xl font-bold uppercase tracking-tighter">Menu</h2>
+          <button 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="p-2 -mr-2 hover:bg-neutral-100 rounded-full transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <nav className="flex-1 p-6 flex flex-col gap-6 overflow-y-auto">
+          <Link 
+            href="/" 
+            className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Inicio
+          </Link>
+          <Link 
+            href="/shop" 
+            className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Tienda
+          </Link>
+          
+          <div className="space-y-4 pt-4 border-t border-neutral-100">
+            <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">Colecciones</span>
+            {displayCollections.map((collection) => (
+               <div key={collection.id} className="text-base font-medium uppercase tracking-wide text-black">
+                  {collection.name}
+               </div>
+            ))}
+          </div>
+
+          <Link 
+            href="/about" 
+            className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors pt-4 border-t border-neutral-100"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Sobre Nosotros
+          </Link>
+          
+          <div className="pt-4 border-t border-neutral-100 space-y-4">
+             <Link 
+                href="/account"
+                className="flex items-center gap-3 text-sm font-medium uppercase tracking-wide hover:text-neutral-500 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+             >
+                <User className="w-5 h-5" /> Mi Cuenta
+             </Link>
+             <Link 
+                href="/contact"
+                className="flex items-center gap-3 text-sm font-medium uppercase tracking-wide hover:text-neutral-500 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+             >
+                Contacto
+             </Link>
+          </div>
+        </nav>
       </div>
     </header>
   );
