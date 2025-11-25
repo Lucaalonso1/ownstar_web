@@ -1,0 +1,133 @@
+import Link from "next/link";
+import { Instagram, Twitter, Facebook } from "lucide-react";
+
+export function Footer() {
+  return (
+    <footer className="bg-black text-white pt-20 pb-10 px-6 md:px-12 border-t border-neutral-800 relative z-10">
+      <div className="max-w-[1800px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-24 mb-20">
+          {/* Brand Column */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold uppercase tracking-tighter">Ownstar</h2>
+            <p className="text-neutral-400 text-sm leading-relaxed max-w-xs">
+              Redefiniendo el streetwear moderno con diseños minimalistas y calidad premium. Diseñado para la nueva generación.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500">
+              Explorar
+            </h3>
+            <nav className="flex flex-col gap-4">
+              <Link
+                href="/shop"
+                className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
+              >
+                Tienda
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
+              >
+                Sobre Nosotros
+              </Link>
+              <Link
+                href="/account"
+                className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
+              >
+                Mi Cuenta
+              </Link>
+            </nav>
+          </div>
+
+          {/* Support */}
+          <div className="space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500">
+              Ayuda
+            </h3>
+            <nav className="flex flex-col gap-4">
+              <Link
+                href="/faq"
+                className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
+              >
+                Preguntas Frecuentes
+              </Link>
+              <Link
+                href="/shipping"
+                className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
+              >
+                Envíos y Devoluciones
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
+              >
+                Contacto
+              </Link>
+              <Link
+                href="/terms"
+                className="text-sm hover:text-neutral-400 transition-colors uppercase tracking-wide w-fit"
+              >
+                Términos y Condiciones
+              </Link>
+            </nav>
+          </div>
+
+          {/* Newsletter */}
+          <div className="space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500">
+              Newsletter
+            </h3>
+            <p className="text-sm text-neutral-400">
+              Suscríbete para recibir acceso anticipado a nuevos lanzamientos.
+            </p>
+            <form className="space-y-4">
+              <input
+                type="email"
+                placeholder="TU EMAIL"
+                className="w-full bg-transparent border-b border-neutral-700 py-2 text-sm focus:border-white focus:outline-none transition-colors placeholder:text-neutral-600 uppercase"
+              />
+              <button
+                type="submit"
+                className="text-xs font-bold uppercase tracking-widest hover:text-neutral-400 transition-colors"
+              >
+                Suscribirse →
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-neutral-900 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-[10px] text-neutral-600 uppercase tracking-wider">
+            © {new Date().getFullYear()} Ownstar. Todos los derechos reservados.
+          </p>
+          
+          {/* Socials */}
+          <div className="flex gap-6">
+            <Link href="https://instagram.com" target="_blank" className="text-neutral-400 hover:text-white transition-colors">
+              <Instagram className="w-5 h-5" />
+            </Link>
+            <Link href="https://twitter.com" target="_blank" className="text-neutral-400 hover:text-white transition-colors">
+              <Twitter className="w-5 h-5" />
+            </Link>
+            <Link href="https://facebook.com" target="_blank" className="text-neutral-400 hover:text-white transition-colors">
+              <Facebook className="w-5 h-5" />
+            </Link>
+          </div>
+          
+          <div className="flex gap-4">
+             {/* Payment Icons Placeholder */}
+             <div className="flex gap-2 opacity-50">
+               <div className="w-8 h-5 bg-neutral-800 rounded-sm" />
+               <div className="w-8 h-5 bg-neutral-800 rounded-sm" />
+               <div className="w-8 h-5 bg-neutral-800 rounded-sm" />
+             </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
