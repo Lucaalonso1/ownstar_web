@@ -13,6 +13,7 @@ interface Product {
   handle: string;
   price: string;
   image: string;
+  secondImage?: string | null;
   colors: string[];
   isNew: boolean;
   isAvailable?: boolean;
@@ -219,8 +220,17 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
                         src={product.image}
                         alt={product.name}
                         fill
-                        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110"
+                        className={`object-cover transition-all duration-700 ease-in-out ${product.secondImage ? 'group-hover:opacity-0' : 'group-hover:scale-105'}`}
                     />
+
+                    {product.secondImage && (
+                      <Image
+                        src={product.secondImage}
+                        alt={product.name}
+                        fill
+                        className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 ease-in-out"
+                      />
+                    )}
                     
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />

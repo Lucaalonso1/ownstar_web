@@ -37,7 +37,7 @@ export default function RootLayout({
         <LanguageProvider>
           <CartProvider>
             <CartDrawer />
-            {children}
+        {children}
             <Footer />
           </CartProvider>
         </LanguageProvider>

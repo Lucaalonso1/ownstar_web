@@ -111,7 +111,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
             onClick={() => setIsMobileMenuOpen(true)}
             className="p-2 -ml-2 hover:opacity-70 transition-opacity"
           >
-            <Menu className="w-6 h-6" />
+          <Menu className="w-6 h-6" />
           </button>
         </div>
 
@@ -152,16 +152,16 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
           >
             <ShoppingBag className="w-6 h-6" />
             {totalItems > 0 && (
-              <span
-                className={cn(
-                  "absolute -top-2 -right-2 text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full transition-colors duration-300",
-                  isWhiteBackground
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
-                )}
-              >
+            <span
+              className={cn(
+                "absolute -top-2 -right-2 text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full transition-colors duration-300",
+                isWhiteBackground
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
+              )}
+            >
                 {totalItems}
-              </span>
+            </span>
             )}
           </Link>
         </div>

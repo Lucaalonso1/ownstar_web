@@ -53,6 +53,7 @@ export default async function ShopPage() {
             handle: p.handle,
             price: `${p.variants[0]?.price || "0.00"} EUR`,
             image: p.image?.src || p.images[0]?.src || "",
+            secondImage: p.images[1]?.src || null,
             colors: ["#000"],
             isNew: p.tags?.includes("new") || false,
             isAvailable,

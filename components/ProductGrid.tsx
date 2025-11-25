@@ -10,6 +10,7 @@ interface Product {
   handle: string;
   price: string;
   image: string;
+  secondImage?: string | null;
   colors: string[];
   isNew: boolean;
   isAvailable?: boolean;
@@ -48,8 +49,17 @@ export function ProductGrid({ products }: ProductGridProps) {
                 src={product.image}
                 alt={product.name}
                 fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                className={`object-cover transition-all duration-700 ease-in-out ${product.secondImage ? 'group-hover:opacity-0' : 'group-hover:scale-105'}`}
               />
+
+              {product.secondImage && (
+                <Image
+                  src={product.secondImage}
+                  alt={product.name}
+                  fill
+                  className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 ease-in-out"
+                />
+              )}
 
               {/* Plus Button */}
               <button className="absolute bottom-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 z-10 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all">
