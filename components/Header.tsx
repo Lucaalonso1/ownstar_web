@@ -170,10 +170,9 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         <div className="w-full px-6 py-12">
           <div className="grid grid-cols-6 gap-4 max-w-[1600px] mx-auto">
             {displayCollections.map((collection) => (
-              <Link
+              <div
                 key={collection.id}
-                href={`/collections/${collection.id}`}
-                className="group relative flex flex-col gap-4"
+                className="group relative flex flex-col gap-4 cursor-default"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 rounded-sm">
                   {collection.image ? (
@@ -195,7 +194,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
                     {collection.name}
                   </h3>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

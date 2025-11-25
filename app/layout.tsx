@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "OWNSTAR | Modern Streetwear",
   description: "Minimalist fashion for the modern generation.",
+  icons: {
+    icon: "/logo-ownstar.png",
+  },
 };
 
 export default function RootLayout({
