@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Header } from "@/components/Header";
 import { getProductsInCollection, getCollections } from "@/lib/shopify";
 import ShopClient from "./ShopClient";
@@ -98,7 +99,9 @@ export default async function ShopPage() {
   return (
     <div className="min-h-screen bg-white text-black">
       <Header collections={collectionsData} forceWhite={true} />
-      <ShopClient products={products} />
+      <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-white text-black">Loading...</div>}>
+        <ShopClient products={products} />
+      </Suspense>
     </div>
   );
 }
