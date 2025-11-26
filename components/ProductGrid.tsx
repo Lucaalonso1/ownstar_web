@@ -33,11 +33,14 @@ export function ProductGrid({ products }: ProductGridProps) {
             className="group flex flex-col gap-3 cursor-pointer"
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100">
-              {/* Sold Out Badge */}
+              {/* Sold Out Badge and Overlay */}
               {product.isAvailable === false && (
-                <span className="absolute top-2 left-2 bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-black z-20">
-                  Sold Out
-                </span>
+                <>
+                    <span className="absolute top-2 left-2 bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-black z-20">
+                    Sold Out
+                    </span>
+                    <div className="absolute inset-0 bg-black/30 z-10 pointer-events-none" />
+                </>
               )}
 
               {/* New Badge */}

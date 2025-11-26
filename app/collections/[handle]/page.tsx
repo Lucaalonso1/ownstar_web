@@ -108,11 +108,14 @@ export default async function CollectionPage({ params }: Props) {
                         className="group flex flex-col gap-4 cursor-pointer"
                       >
                         <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100">
-                          {/* Sold Out Badge */}
+                          {/* Sold Out Badge and Overlay */}
                           {!product.isAvailable && (
-                            <span className="absolute top-4 left-4 bg-white px-3 py-2 text-xs font-bold uppercase tracking-wider text-black z-20">
-                              Sold Out
-                            </span>
+                            <>
+                                <span className="absolute top-4 left-4 bg-white px-3 py-2 text-xs font-bold uppercase tracking-wider text-black z-20">
+                                Sold Out
+                                </span>
+                                <div className="absolute inset-0 bg-black/30 z-10 pointer-events-none" />
+                            </>
                           )}
 
                           <Image
