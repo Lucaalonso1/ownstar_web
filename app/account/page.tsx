@@ -14,6 +14,7 @@ export default async function AccountPage() {
       if (fetchedCollections.length > 0) {
         collectionsData = fetchedCollections.map((c: any) => ({
           id: c.id,
+          handle: c.handle,
           name: c.title,
           image: c.image?.src || "",
         }));

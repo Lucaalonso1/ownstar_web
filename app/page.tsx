@@ -26,6 +26,7 @@ interface ShopifyProduct {
 interface ShopifyCollection {
   id: number;
   title: string;
+  handle: string;
   image?: ShopifyImage;
 }
 
@@ -92,6 +93,7 @@ export default async function Home() {
       if (shopifyCollections.length > 0) {
         collectionsData = shopifyCollections.map((c: ShopifyCollection) => ({
           id: c.id,
+          handle: c.handle,
           name: c.title,
           image: c.image?.src || "", // Collections might not have images, header handles empty string check
         }));

@@ -10,6 +10,7 @@ import { useLanguage } from "@/context/LanguageContext";
 
 interface Collection {
   id: string | number;
+  handle?: string;
   name: string;
   image: string;
 }
@@ -50,12 +51,14 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
       : [
           {
             id: "drop001",
+            handle: "drop-001",
             name: "Drop 001",
             image:
               "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop",
           },
           {
             id: "drop002",
+            handle: "drop-002",
             name: "Drop 002",
             image:
               "https://images.unsplash.com/photo-1529139574466-a302c27e3844?q=80&w=1000&auto=format&fit=crop",
@@ -216,9 +219,11 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         <div className="w-full px-6 py-12">
           <div className="grid grid-cols-6 gap-4 max-w-[1600px] mx-auto">
             {displayCollections.map((collection) => (
-              <div
+              <Link
                 key={collection.id}
-                className="group relative flex flex-col gap-4 cursor-default"
+                href={`/collections/${collection.handle || collection.id}`}
+                className="group relative flex flex-col gap-4 cursor-pointer"
+                onClick={() => setIsCollectionsOpen(false)}
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 rounded-sm">
                   {collection.image ? (
@@ -240,7 +245,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
                     {collection.name}
                   </h3>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -290,9 +295,14 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
           <div className="space-y-4 pt-4 border-t border-neutral-100">
             <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">{t.header.collections}</span>
             {displayCollections.map((collection) => (
-               <div key={collection.id} className="text-base font-medium uppercase tracking-wide text-black">
+               <Link
+                 key={collection.id}
+                 href={`/collections/${collection.handle || collection.id}`}
+                 className="block text-base font-medium uppercase tracking-wide text-black hover:text-neutral-500 transition-colors"
+                 onClick={() => setIsMobileMenuOpen(false)}
+               >
                   {collection.name}
-               </div>
+               </Link>
             ))}
           </div>
 

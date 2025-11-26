@@ -56,6 +56,59 @@ export async function getCollections() {
   }
 }
 
+export async function getCollectionByHandle(handle: string) {
+  const URL = `https://${domain}/admin/api/2024-01/collections.json?handle=${handle}`; // Not valid endpoint for filtering by handle directly usually on collections list, but let's check docs or use smart/custom logic.
+  // Actually, Shopify Admin API doesn't allow filtering collections by handle easily in one go for both types without iterating.
+  // Better to fetch all and find, OR use Storefront API which is much better for "get by handle".
+  // Let's switch to Storefront API for this page if possible, or fetch all and find.
+  // Given we already have Admin API setup, let's use Admin API to find the ID first?
+  // Actually, Storefront API is cleaner for "get collection by handle and its products".
+  
+  // Let's use the storefrontRequest for this.
+  const query = `
+    query getCollectionByHandle($handle: String!) {
+      collection(handle: $handle) {
+        id
+        title
+        description
+        image {
+          url
+          altText
+        }
+        products(first: 20) {
+          edges {
+            node {
+              id
+              title
+              handle
+              availableForSale
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+              images(first: 2) {
+                edges {
+                  node {
+                    url
+                    altText
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const variables = { handle };
+  const data = await storefrontRequest(query, variables);
+  return data.collection;
+}
+
+
 export async function getProductByHandle(handle: string) {
   const URL = `https://${domain}/admin/api/2024-01/products.json?handle=${handle}`;
 

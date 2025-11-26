@@ -15,6 +15,7 @@ export default async function AboutPage() {
       if (shopifyCollections.length > 0) {
         collectionsData = shopifyCollections.map((c: any) => ({
           id: c.id,
+          handle: c.handle,
           name: c.title,
           image: c.image?.src || "",
         }));
