@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X, Plus, Minus, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
@@ -28,6 +28,10 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Mobile Accordion States
+  const [mobileShopOpen, setMobileShopOpen] = useState(false);
+  const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -262,7 +266,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
 
       <div
         className={cn(
-          "fixed top-0 left-0 h-full w-[300px] bg-white text-black z-[80] shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] md:hidden flex flex-col",
+          "fixed top-0 left-0 h-full w-[85vw] sm:w-[400px] bg-white text-black z-[80] shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] md:hidden flex flex-col",
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -276,7 +280,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
           </button>
         </div>
 
-        <nav className="flex-1 p-6 flex flex-col gap-6 overflow-y-auto">
+        <nav className="flex-1 px-6 py-8 flex flex-col gap-6 overflow-y-auto">
           <Link 
             href="/" 
             className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors"
@@ -284,37 +288,81 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
           >
             {t.header.home}
           </Link>
-          <Link 
-            href="/shop" 
-            className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {t.header.shop}
-          </Link>
+
+          {/* Shop Accordion */}
+          <div className="flex flex-col">
+             <button 
+                onClick={() => setMobileShopOpen(!mobileShopOpen)}
+                className="flex justify-between items-center text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors w-full text-left"
+             >
+                {t.header.shop}
+                {mobileShopOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+             </button>
+             
+             <div className={cn(
+                "overflow-hidden transition-all duration-300 ease-in-out flex flex-col gap-4 pl-4",
+                mobileShopOpen ? "max-h-[300px] pt-4 opacity-100" : "max-h-0 pt-0 opacity-0"
+             )}>
+                <Link 
+                  href="/shop" 
+                  className="text-sm font-medium uppercase tracking-wider text-neutral-600 hover:text-black"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {t.header.view_all}
+                </Link>
+                <Link 
+                  href="/shop?category=t-shirt" 
+                  className="text-sm font-medium uppercase tracking-wider text-neutral-600 hover:text-black"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {t.header.t_shirts}
+                </Link>
+                <Link 
+                  href="/shop?category=hoodie" 
+                  className="text-sm font-medium uppercase tracking-wider text-neutral-600 hover:text-black"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {t.header.hoodies}
+                </Link>
+             </div>
+          </div>
           
-          <div className="space-y-4 pt-4 border-t border-neutral-100">
-            <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">{t.header.collections}</span>
-            {displayCollections.map((collection) => (
-               <Link
-                 key={collection.id}
-                 href={`/collections/${collection.handle || collection.id}`}
-                 className="block text-base font-medium uppercase tracking-wide text-black hover:text-neutral-500 transition-colors"
-                 onClick={() => setIsMobileMenuOpen(false)}
-               >
-                  {collection.name}
-               </Link>
-            ))}
+          {/* Collections Accordion */}
+          <div className="flex flex-col">
+             <button 
+                onClick={() => setMobileCollectionsOpen(!mobileCollectionsOpen)}
+                className="flex justify-between items-center text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors w-full text-left"
+             >
+                {t.header.collections}
+                {mobileCollectionsOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+             </button>
+
+             <div className={cn(
+                "overflow-hidden transition-all duration-300 ease-in-out flex flex-col gap-4 pl-4",
+                mobileCollectionsOpen ? "max-h-[500px] pt-4 opacity-100" : "max-h-0 pt-0 opacity-0"
+             )}>
+                {displayCollections.map((collection) => (
+                   <Link
+                     key={collection.id}
+                     href={`/collections/${collection.handle || collection.id}`}
+                     className="text-sm font-medium uppercase tracking-wider text-neutral-600 hover:text-black"
+                     onClick={() => setIsMobileMenuOpen(false)}
+                   >
+                      {collection.name}
+                   </Link>
+                ))}
+             </div>
           </div>
 
           <Link 
             href="/about" 
-            className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors pt-4 border-t border-neutral-100"
+            className="text-lg font-bold uppercase tracking-wide hover:text-neutral-500 transition-colors"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             {t.header.about}
           </Link>
           
-          <div className="pt-4 border-t border-neutral-100 space-y-4">
+          <div className="pt-8 mt-auto border-t border-neutral-100 space-y-4">
              <Link 
                 href="/account"
                 className="flex items-center gap-3 text-sm font-medium uppercase tracking-wide hover:text-neutral-500 transition-colors"
@@ -335,6 +383,13 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
              >
                 Language: {language.toUpperCase()}
              </button>
+          </div>
+
+          {/* Footer Logo in Menu */}
+          <div className="mt-8 flex justify-center opacity-20">
+             <div className="w-8 h-8 rounded-full border border-black flex items-center justify-center text-xs font-bold">
+                N
+             </div>
           </div>
         </nav>
       </div>
