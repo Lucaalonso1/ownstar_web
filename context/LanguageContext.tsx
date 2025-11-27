@@ -28,6 +28,10 @@ const translations = {
       email_placeholder: "DIRECCIÓN DE EMAIL",
       early_access: "Acceso Anticipado + 10% Descuento Extra",
       privacy_policy: "Al suscribirte aceptas nuestra Política de Privacidad.",
+      black_friday: "BLACK FRIDAY",
+      sale_text: "TODO AL 50%",
+      rotating_texts: ["TODO AL 50%", "SOLO POR TIEMPO LIMITADO", "ENVÍO GRATIS +100€", "NO TE LO PIERDAS"],
+      shop_now: "COMPRAR AHORA",
     },
     footer: {
       explore: "Explorar",
@@ -112,6 +116,10 @@ const translations = {
       email_placeholder: "EMAIL ADDRESS",
       early_access: "Early Access + Extra 10% Off",
       privacy_policy: "By subscribing you agree to our Privacy Policy.",
+      black_friday: "BLACK FRIDAY",
+      sale_text: "EVERYTHING 50% OFF",
+      rotating_texts: ["EVERYTHING 50% OFF", "LIMITED TIME ONLY", "FREE SHIPPING +100€", "DON'T MISS OUT"],
+      shop_now: "SHOP NOW",
     },
     footer: {
       explore: "Explore",
