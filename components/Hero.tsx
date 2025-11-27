@@ -16,92 +16,17 @@ export function Hero() {
     // Calculate next Friday at 00:00 Madrid time
     const now = new Date();
     
-    // Get current time in Madrid
-    // Note: This approach gets the next Friday relative to current date
-    const calculateNextFriday = () => {
-      const d = new Date();
-      // Set timezone to Madrid to check the day
-      const madridTime = new Date(d.toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
-      const dayOfWeek = madridTime.getDay();
-      const daysUntilFriday = (5 + 7 - dayOfWeek) % 7;
+    const getTargetDate = () => {
+      // Target: December 4, 2025 at 00:00:00
+      // We can set this to a specific timezone if needed, usually Madrid for this project based on context
+      // 2025-12-04T00:00:00 in Madrid
       
-      // Set target to next Friday
-      const target = new Date(madridTime);
-      target.setDate(madridTime.getDate() + daysUntilFriday);
-      target.setHours(0, 0, 0, 0);
-      
-      // If it's strictly today (Friday) but passed 00:00 (which it is if we are running this),
-      // or if diff is 0 and we want next week:
-      if (target <= madridTime) {
-         target.setDate(target.getDate() + 7);
-      }
-      
-      // Convert back to a timestamp that works globally
-      // We constructed 'target' based on Madrid time values. 
-      // To compare with 'now' (local), we need to treat 'target' as if it was in Madrid timezone.
-      // A simple way is to create an ISO string with Madrid offset, but offset changes (DST).
-      // Easier: use the difference computed.
-      
+      // Create date for Dec 4, 2025
+      const target = new Date('2025-12-04T00:00:00');
       return target;
     };
 
-    // For simplicity in this static demo without complex timezone libraries:
-    // We will just set a fixed logic that finds the next Friday relative to the browser,
-    // assuming the user is viewing relevant to their location or approximating.
-    // BUT the user asked for "Madrid time".
-    // Let's use a robust way to set the target timestamp.
-    
-    // 1. Get current date string in Madrid
-    // 2. Find next Friday date string
-    // 3. Create a Date object for that specific ISO time in Madrid (Europe/Madrid)
-    
-    const getNextFridayMadrid = () => {
-        const now = new Date();
-        const madridDate = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
-        const day = madridDate.getDay();
-        const diff = (5 - day + 7) % 7;
-        
-        const nextFriday = new Date(madridDate);
-        nextFriday.setDate(madridDate.getDate() + (diff === 0 && madridDate.getHours() >= 0 ? 7 : diff));
-        nextFriday.setHours(0, 0, 0, 0);
-        
-        // We need the timestamp of this "Madrid Moment".
-        // The object 'nextFriday' currently has the local timezone offset but with Madrid's wall-clock time values (because we created it from values).
-        // We need to interpret those values as Madrid time.
-        // Since we don't have a library, we can format it back to a string with timezone.
-        
-        const year = nextFriday.getFullYear();
-        const month = String(nextFriday.getMonth() + 1).padStart(2, '0');
-        const date = String(nextFriday.getDate()).padStart(2, '0');
-        
-        // Create an ISO string for the target time in Madrid. 
-        // We don't know if it's +1 or +2 easily without checking, but usually we can let the Date constructor handle it if we pass the string.
-        // Actually, easiest hack: 
-        // Count down to a specific timestamp.
-        
-        // Let's stick to a simpler approximation for the "next Friday" logic that works well enough.
-        // Target: Next Friday 00:00 Local Time (User's time) usually makes most sense for UX,
-        // unless it's a global drop. If global drop at 00:00 Madrid:
-        // That is 23:00 London (prev day), 18:00 NY (prev day).
-        
-        // Let's try to hit the Madrid midnight correctly.
-        // We'll assume the current date is close enough to rely on standard Date methods with simple logic.
-        
-        const d = new Date();
-        const daysToFriday = (5 + 7 - d.getDay()) % 7;
-        const target = new Date(d);
-        target.setDate(d.getDate() + (daysToFriday === 0 ? 7 : daysToFriday));
-        target.setHours(0, 0, 0, 0); // Midnight local
-        
-        // Adjust to Madrid (approximate if needed, or just leave local which is safer for UI)
-        // User asked specifically for "Friday 00:00 in Madrid".
-        // If I am in NY, and I see "Friday 00:00", I expect my Friday 00:00? Or Madrid's?
-        // Usually Madrid's.
-        
-        return target;
-    };
-
-    const targetDate = getNextFridayMadrid();
+    const targetDate = getTargetDate();
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -133,10 +58,10 @@ export function Hero() {
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
         <h1 className="mb-2 text-6xl font-bold tracking-tighter uppercase sm:text-8xl md:text-9xl">
-          Black Week
+          "DROP 005"
         </h1>
-        <p className="mb-8 text-xl font-light tracking-widest uppercase sm:text-3xl">
-          Up to 50% Off
+        <p className="mb-8 text-xl font-light tracking-widest uppercase sm:text-3xl text-neutral-300">
+          04.12.2025
         </p>
 
         <div className="mb-12 flex gap-8 text-center">
