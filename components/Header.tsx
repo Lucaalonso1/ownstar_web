@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { SearchOverlay } from "@/components/SearchOverlay";
 
 interface Collection {
   id: string | number;
@@ -26,6 +27,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -70,15 +72,16 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
         ];
 
   const isWhiteBackground =
-    forceWhite || isScrolled || isCollectionsOpen || isShopOpen || isHeaderHovered;
+    forceWhite || isScrolled || isCollectionsOpen || isShopOpen || isHeaderHovered || isSearchOpen;
 
   return (
     <header
       className={cn(
         "fixed top-[15px] md:top-[25px] left-0 w-full z-[60] transition-all duration-300",
         isWhiteBackground
-          ? "bg-white text-black shadow-sm"
-          : "bg-transparent text-white"
+          ? "bg-white text-black"
+          : "bg-transparent text-white",
+        isWhiteBackground && !isCollectionsOpen && !isShopOpen && !isSearchOpen ? "shadow-sm" : ""
       )}
       onMouseEnter={() => setIsHeaderHovered(true)}
       onMouseLeave={() => {
@@ -151,7 +154,10 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
           <Link href="/account" className="hover:opacity-70 transition-opacity">
             <User className="w-6 h-6" />
           </Link>
-          <button className="hover:opacity-70 transition-opacity">
+          <button 
+            className="hover:opacity-70 transition-opacity"
+            onClick={() => setIsSearchOpen(true)}
+          >
             <Search className="w-6 h-6" />
           </button>
           <Link
@@ -256,6 +262,11 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
       </div>
 
       {/* Mobile Menu Drawer */}
+      <SearchOverlay 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
+        collections={displayCollections} 
+      />
       <div
         className={cn(
           "fixed inset-0 bg-black/50 z-[70] transition-opacity duration-300 md:hidden",
