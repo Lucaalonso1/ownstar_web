@@ -240,6 +240,11 @@ export default function ShopClient({ products, hideHero = false }: ShopClientPro
                         )}
                     </div>
 
+                    {/* Sold Out Overlay */}
+                    {product.isAvailable === false && (
+                        <div className="absolute inset-0 bg-black/30 z-10 pointer-events-none" />
+                    )}
+
                     <Image
                         src={product.image}
                         alt={product.name}
