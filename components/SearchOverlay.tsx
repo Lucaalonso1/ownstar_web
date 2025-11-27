@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, Search, ArrowRight, Loader2, Plus } from "lucide-react";
+import { X, Search, Loader2, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -32,7 +32,7 @@ interface SearchOverlayProps {
   collections: Collection[];
 }
 
-export function SearchOverlay({ isOpen, onClose, collections }: SearchOverlayProps) {
+export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ export function SearchOverlay({ isOpen, onClose, collections }: SearchOverlayPro
       // Reset query when closed
       setTimeout(() => setQuery(""), 300);
     }
-  }, [isOpen]);
+  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Prevent body scroll when open
   useEffect(() => {
@@ -234,7 +234,7 @@ export function SearchOverlay({ isOpen, onClose, collections }: SearchOverlayPro
                                         )}
                                         <span className={cn(
                                             "text-[11px] font-medium",
-                                            product.compareAtPrice ? "bg-[#F4E04E] px-1 py-0.5 text-black" : "text-neutral-600"
+                                            product.compareAtPrice ? "text-red-600" : "text-neutral-600"
                                         )}>
                                             {product.price}
                                         </span>
