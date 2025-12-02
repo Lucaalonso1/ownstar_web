@@ -126,7 +126,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
           </button>
         </div>
 
-        <div className="absolute left-1/2 transform -translate-x-1/2">
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-[45%]">
           <Link href="/">
             <Image
               src="/logo-ownstar.png"
@@ -135,7 +135,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
               height={80}
               className={cn(
                 "h-auto object-contain transition-all duration-300",
-                isWhiteBackground ? "w-28" : "w-28 invert brightness-0"
+                isWhiteBackground ? "w-32" : "w-32 invert brightness-0"
               )}
               priority
             />
