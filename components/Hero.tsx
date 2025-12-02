@@ -1,68 +1,44 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
-import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 export function Hero() {
   const { t } = useLanguage();
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % t.hero.rotating_texts.length);
-    }, 2000); // Change every 2 seconds
-    return () => clearInterval(interval);
-  }, [t.hero.rotating_texts.length]);
 
   return (
     <section className="fixed top-0 left-0 h-screen w-full overflow-hidden bg-neutral-900 text-white z-0">
-      {/* Background Video/Image Placeholder */}
-      <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center opacity-40 grayscale"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40"></div>
+      {/* Background Image - Full Opacity, No Grayscale for vivid look like reference */}
+      <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center"></div>
+      
+      {/* Subtle gradient for text readability at bottom */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10"></div>
 
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center"
-        >
-          <h1 className="font-code-next mb-6 text-6xl font-bold tracking-tighter uppercase sm:text-8xl md:text-9xl text-white drop-shadow-lg">
-            {t.hero.black_friday}
-          </h1>
+      {/* Bottom Content Grid */}
+      <div className="absolute bottom-0 left-0 w-full z-20 px-6 py-6 md:px-24 md:py-12">
+        <div className="flex flex-col md:flex-row w-full justify-between items-end text-xs md:text-sm font-bold tracking-widest uppercase">
           
-          <div className="h-20 mb-8 flex items-center justify-center overflow-hidden w-full">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={index}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -20, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-xl font-bold tracking-[0.2em] uppercase sm:text-3xl md:text-4xl text-red-500"
-              >
-                {t.hero.rotating_texts[index]}
-              </motion.p>
-            </AnimatePresence>
+          {/* Left: Collection Info */}
+          <div className="flex flex-col justify-end text-center md:text-left mb-6 md:mb-0 w-full md:w-auto">
+            <p>FALL / WINTER 2025</p>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link 
-              href="/shop" 
-              className="group relative inline-flex items-center justify-center bg-white px-12 py-4 text-sm font-bold text-black uppercase tracking-widest transition-colors hover:bg-neutral-200"
-            >
-              {t.hero.shop_now}
-            </Link>
-          </motion.div>
-        </motion.div>
+          {/* Center: Shipping Info */}
+          <div className="flex flex-col justify-end text-center mb-6 md:mb-0 w-full md:w-auto absolute left-1/2 transform -translate-x-1/2 bottom-6 md:bottom-12">
+            <p>PREMIUM</p>
+            <p>QUALITY</p>
+          </div>
+
+          {/* Right: Copyright/Extra Info */}
+          <div className="flex flex-col justify-end text-center md:text-right w-full md:w-auto">
+            <p>CRAFTED WITH</p>
+            <p>CARE ©OWNSTAR</p>
+            <p className="mt-2 opacity-70">ONLY AVAILABLE</p>
+            <p className="opacity-70">AT OWNSTAR.COM</p>
+          </div>
+
+        </div>
       </div>
     </section>
   );

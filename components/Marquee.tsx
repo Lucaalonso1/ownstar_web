@@ -9,12 +9,12 @@ interface MarqueeProps {
 }
 
 export function Marquee({ 
-  text = "REDEFINING STREETWEAR                50% DISCOUNTS              PREMIUM QUALITY                ", 
+  text = "PREMIUM STREETWEAR | © OWNSTAR, 2025 - REDEFINING STYLE                PREMIUM STREETWEAR | © OWNSTAR, 2025 - REDEFINING STYLE                ", 
   className,
   reverse = false
 }: MarqueeProps) {
   return (
-    <div className={cn("fixed top-0 left-0 w-full overflow-hidden bg-[#000033] py-1 z-[70] relative select-none flex", className)}>
+    <div className={cn("fixed top-0 left-0 w-full overflow-hidden bg-[#000033] py-1 z-[70] relative select-none flex border-b border-[#000033]", className)}>
       <div 
         className={cn(
           "animate-marquee whitespace-nowrap flex min-w-full shrink-0",
@@ -24,7 +24,7 @@ export function Marquee({
         {[...Array(4)].map((_, i) => (
           <span 
             key={i} 
-            className="text-white text-xs md:text-sm font-medium uppercase tracking-widest mx-4 whitespace-pre"
+            className="text-white text-xs font-medium uppercase tracking-widest mx-4 whitespace-pre"
           >
             {text}
           </span>
@@ -34,13 +34,13 @@ export function Marquee({
       <div 
         className={cn(
           "animate-marquee whitespace-nowrap flex min-w-full shrink-0",
-            reverse && "animate-marquee-reverse"
+          reverse && "animate-marquee-reverse"
         )}
       >
         {[...Array(4)].map((_, i) => (
           <span 
             key={i} 
-            className="text-white text-xs md:text-sm font-medium uppercase tracking-widest mx-4 whitespace-pre"
+            className="text-white text-xs font-medium uppercase tracking-widest mx-4 whitespace-pre"
           >
             {text}
           </span>

@@ -77,7 +77,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
   return (
     <header
       className={cn(
-        "fixed top-[15px] md:top-[25px] left-0 w-full z-[60] transition-all duration-300",
+        "fixed top-[15px] left-0 w-full z-[60] transition-all duration-300",
         isWhiteBackground
           ? "bg-white text-black"
           : "bg-transparent text-white",
