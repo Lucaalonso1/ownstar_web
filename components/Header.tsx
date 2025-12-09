@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ShoppingBag, User, Menu, X, Plus, Minus, ChevronDown } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X, Plus, Minus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
@@ -92,7 +92,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
     >
       <div
         className={cn(
-          "flex items-center justify-between px-6 transition-all duration-300 relative z-[60] py-2"
+          "flex items-center justify-between px-4 sm:px-6 transition-all duration-300 relative z-[60] py-2"
         )}
       >
         <div className="hidden md:flex items-center gap-6 text-xs font-medium tracking-widest uppercase">
@@ -135,7 +135,7 @@ export function Header({ collections = [], forceWhite = false }: HeaderProps) {
               height={80}
               className={cn(
                 "h-auto object-contain transition-all duration-300",
-                isWhiteBackground ? "w-32" : "w-32 invert brightness-0"
+                isWhiteBackground ? "w-24 sm:w-28 md:w-32" : "w-24 sm:w-28 md:w-32 invert brightness-0"
               )}
               priority
             />

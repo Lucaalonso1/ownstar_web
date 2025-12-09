@@ -24,8 +24,8 @@ interface ProductGridProps {
 
 export function ProductGrid({ products }: ProductGridProps) {
   return (
-    <section className="bg-white w-full min-h-screen px-4 py-24 md:px-8 relative z-10">
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-12">
+    <section className="bg-white w-full min-h-screen px-4 sm:px-6 py-16 sm:py-20 md:py-24 md:px-8 relative z-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-x-3 sm:gap-x-4 gap-y-8 sm:gap-y-10 md:gap-y-12">
         {products.map((product) => (
           <Link
             key={product.id}
