@@ -122,7 +122,7 @@ export function Drop005Section() {
               transition={{ duration: 0.6, delay: 0.5 }}
             >
               <Link
-                href="/collections/drop005"
+                href="/collections/drop-005"
                 className="group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition-all duration-300"
               >
                 Ver Colección
@@ -153,10 +153,15 @@ export function Drop005Section() {
                 className="group block cursor-pointer"
               >
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100 mb-6">
+                  {/* NEW IN Badge */}
+                  <span className="absolute top-4 left-4 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-black z-20">
+                    NEW IN
+                  </span>
+                  
                   {/* Sold Out Badge */}
                   {product.isAvailable === false && (
                     <>
-                      <span className="absolute top-4 left-4 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-black z-20">
+                      <span className="absolute top-4 right-4 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-black z-20">
                         Sold Out
                       </span>
                       <div className="absolute inset-0 bg-black/30 z-10 pointer-events-none" />

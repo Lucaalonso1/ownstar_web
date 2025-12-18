@@ -144,9 +144,26 @@ export default async function Home() {
           products = products.filter((p: any) => !drop005Handles.has(p.handle));
         }
       }
+
+      // Always filter out drop005 hardcoded products to avoid duplicates
+      // These are the products shown in Drop005Section component
+      const drop005HardcodedHandles = new Set([
+        "rodeo-crewneck",
+        "ownstar-studios-crewneck",
+        "ownstar-staff-member-crewneck"
+      ]);
+      products = products.filter((p: any) => !drop005HardcodedHandles.has(p.handle));
     } catch (error) {
       console.error("Failed to fetch data from Shopify:", error);
     }
+  } else {
+    // Even if Shopify is not configured, filter out drop005 products from dummy data
+    const drop005HardcodedHandles = new Set([
+      "rodeo-crewneck",
+      "ownstar-studios-crewneck",
+      "ownstar-staff-member-crewneck"
+    ]);
+    products = products.filter((p: any) => !drop005HardcodedHandles.has(p.handle));
   }
 
   return (
