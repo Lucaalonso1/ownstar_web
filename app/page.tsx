@@ -1,7 +1,8 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ProductGrid } from "@/components/ProductGrid";
-import { getProductsInCollection, getCollections } from "@/lib/shopify";
+import { Drop005Section } from "@/components/Drop005Section";
+import { getProductsInCollection, getCollections, getCollectionByHandle, getProductByHandle } from "@/lib/shopify";
 
 interface ShopifyImage {
   src: string;
@@ -48,6 +49,21 @@ const dummyProducts = [
 export default async function Home() {
   let products = dummyProducts;
   let collectionsData: { id: number; name: string; image: string }[] = [];
+  let drop005Data: {
+    title: string;
+    description?: string;
+    image?: string;
+    products: Array<{
+      id: string;
+      name: string;
+      handle: string;
+      price: string;
+      image: string;
+      secondImage?: string | null;
+      isAvailable?: boolean;
+    }>;
+    handle: string;
+  } | null = null;
 
   // Try to fetch from Shopify if env vars are present
   if (
@@ -55,10 +71,11 @@ export default async function Home() {
     process.env.NEXT_PUBLIC_SHOPIFY_ADMIN_ACCESS_TOKEN
   ) {
     try {
-      // Fetch products and collections in parallel
-      const [shopifyProducts, shopifyCollections] = await Promise.all([
+      // Fetch products, collections, and drop005 in parallel
+      const [shopifyProducts, shopifyCollections, drop005Collection] = await Promise.all([
         getProductsInCollection(),
         getCollections(),
+        getCollectionByHandle("drop005").catch(() => null), // Silently fail if drop005 doesn't exist
       ]);
 
       // Process Products
@@ -98,6 +115,35 @@ export default async function Home() {
           image: c.image?.src || "", // Collections might not have images, header handles empty string check
         }));
       }
+
+      // Process Drop005 Collection
+      if (drop005Collection && drop005Collection.products?.edges) {
+        const drop005Products = drop005Collection.products.edges
+          .slice(0, 3) // Only take first 3 products
+          .map(({ node }: any) => ({
+            id: node.id,
+            name: node.title,
+            handle: node.handle,
+            price: `${node.priceRange?.minVariantPrice?.amount || "0.00"} ${node.priceRange?.minVariantPrice?.currencyCode || "EUR"}`,
+            image: node.images?.edges[0]?.node?.url || "",
+            secondImage: node.images?.edges[1]?.node?.url || null,
+            isAvailable: node.availableForSale,
+          }));
+
+        if (drop005Products.length > 0) {
+          drop005Data = {
+            title: drop005Collection.title || "Drop 005",
+            description: drop005Collection.description || undefined,
+            image: drop005Collection.image?.url || undefined,
+            products: drop005Products,
+            handle: "drop005",
+          };
+
+          // Filter out drop005 products from the main products list to avoid duplicates
+          const drop005Handles = new Set(drop005Products.map((p: any) => p.handle));
+          products = products.filter((p: any) => !drop005Handles.has(p.handle));
+        }
+      }
     } catch (error) {
       console.error("Failed to fetch data from Shopify:", error);
     }
@@ -113,6 +159,10 @@ export default async function Home() {
 
       {/* Content that slides over the fixed hero */}
       <div className="relative z-10 bg-white">
+        {/* Drop005 Section - Featured Collection - Always shown */}
+        <Drop005Section />
+        
+        {/* All Products Grid */}
         <ProductGrid products={products} />
       </div>
     </main>
