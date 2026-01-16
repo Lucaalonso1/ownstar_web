@@ -61,7 +61,7 @@ export default async function Home() {
       compareAtPrice?: string | null;
       image: string;
       secondImage?: string | null;
-      isAvailable?: boolean;
+      isAvailable: boolean;
     }>;
     handle: string;
   } | null = null;
@@ -135,7 +135,7 @@ export default async function Home() {
               compareAtPrice: compareAtPrice ? `${compareAtPrice} ${currencyCode}` : null,
               image: node.images?.edges[0]?.node?.url || "",
               secondImage: node.images?.edges[1]?.node?.url || null,
-              isAvailable: node.availableForSale,
+              isAvailable: node.availableForSale ?? true,
             };
           });
 
