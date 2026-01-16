@@ -17,8 +17,17 @@ export async function GET(request: NextRequest) {
     }
 
     const image = product.image?.src || product.images?.[0]?.src || null;
+    const secondImage = product.images?.[1]?.src || null;
+    const firstVariant = product.variants?.[0];
+    const price = firstVariant?.price || "0.00";
+    const compareAtPrice = firstVariant?.compare_at_price || null;
 
-    return NextResponse.json({ image });
+    return NextResponse.json({ 
+      image,
+      secondImage,
+      price: `${price} EUR`,
+      compareAtPrice: compareAtPrice ? `${compareAtPrice} EUR` : null
+    });
   } catch (error) {
     console.error("Error fetching product image:", error);
     return NextResponse.json({ error: "Failed to fetch product image" }, { status: 500 });

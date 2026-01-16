@@ -36,15 +36,27 @@ interface ProductWithImage {
   name: string;
   handle: string;
   price: string;
+  compareAtPrice?: string | null;
   isAvailable: boolean;
   image?: string;
+  secondImage?: string | null;
 }
 
-export function Drop005Section() {
-  const [productsWithImages, setProductsWithImages] = useState<ProductWithImage[]>(DROP005_PRODUCTS);
+interface Drop005SectionProps {
+  products?: ProductWithImage[];
+}
+
+export function Drop005Section({ products }: Drop005SectionProps) {
+  const [productsWithImages, setProductsWithImages] = useState<ProductWithImage[]>(products || DROP005_PRODUCTS);
 
   useEffect(() => {
-    // Fetch images for each product
+    // If products are passed as props, use them directly (they already have images from Shopify)
+    if (products && products.length > 0) {
+      setProductsWithImages(products);
+      return;
+    }
+
+    // Otherwise, fetch images and prices for hardcoded products
     const fetchImages = async () => {
       const updatedProducts = await Promise.all(
         DROP005_PRODUCTS.map(async (product) => {
@@ -52,7 +64,13 @@ export function Drop005Section() {
             const response = await fetch(`/api/product-image?handle=${product.handle}`);
             if (response.ok) {
               const data = await response.json();
-              return { ...product, image: data.image || undefined };
+              return { 
+                ...product, 
+                image: data.image || undefined,
+                secondImage: data.secondImage || null,
+                price: data.price || product.price,
+                compareAtPrice: data.compareAtPrice || null
+              };
             }
           } catch (error) {
             console.error(`Error fetching image for ${product.handle}:`, error);
@@ -64,7 +82,7 @@ export function Drop005Section() {
     };
 
     fetchImages();
-  }, []);
+  }, [products]);
 
   return (
     <section className="relative w-full bg-white text-black overflow-hidden">
@@ -170,12 +188,22 @@ export function Drop005Section() {
 
                   {/* Main Image */}
                   {product.image ? (
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
-                    />
+                    <>
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className={`object-cover transition-all duration-700 ease-in-out ${product.secondImage ? 'group-hover:opacity-0' : 'group-hover:scale-105'}`}
+                      />
+                      {product.secondImage && (
+                        <Image
+                          src={product.secondImage}
+                          alt={product.name}
+                          fill
+                          className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 ease-in-out"
+                        />
+                      )}
+                    </>
                   ) : (
                     <div className="w-full h-full bg-neutral-200 flex items-center justify-center">
                       <span className="text-neutral-400 text-sm uppercase tracking-wider text-center px-4">
@@ -201,9 +229,22 @@ export function Drop005Section() {
                     <p className="text-xs text-neutral-500 uppercase tracking-wider">
                       {product.isAvailable !== false ? "Disponible" : "Agotado"}
                     </p>
-                    <span className="text-sm md:text-base font-medium">
-                      {product.price}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {product.compareAtPrice ? (
+                        <>
+                          <span className="text-sm md:text-base text-neutral-400 line-through decoration-neutral-400">
+                            {product.compareAtPrice}
+                          </span>
+                          <span className="text-sm md:text-base font-bold text-red-600">
+                            {product.price}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-sm md:text-base text-neutral-600 font-medium">
+                          {product.price}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>

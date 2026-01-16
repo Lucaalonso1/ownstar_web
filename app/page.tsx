@@ -58,6 +58,7 @@ export default async function Home() {
       name: string;
       handle: string;
       price: string;
+      compareAtPrice?: string | null;
       image: string;
       secondImage?: string | null;
       isAvailable?: boolean;
@@ -120,15 +121,23 @@ export default async function Home() {
       if (drop005Collection && drop005Collection.products?.edges) {
         const drop005Products = drop005Collection.products.edges
           .slice(0, 3) // Only take first 3 products
-          .map(({ node }: any) => ({
-            id: node.id,
-            name: node.title,
-            handle: node.handle,
-            price: `${node.priceRange?.minVariantPrice?.amount || "0.00"} ${node.priceRange?.minVariantPrice?.currencyCode || "EUR"}`,
-            image: node.images?.edges[0]?.node?.url || "",
-            secondImage: node.images?.edges[1]?.node?.url || null,
-            isAvailable: node.availableForSale,
-          }));
+          .map(({ node }: any) => {
+            const firstVariant = node.variants?.edges[0]?.node;
+            const compareAtPrice = firstVariant?.compareAtPrice?.amount;
+            const price = firstVariant?.price?.amount || node.priceRange?.minVariantPrice?.amount || "0.00";
+            const currencyCode = firstVariant?.price?.currencyCode || firstVariant?.compareAtPrice?.currencyCode || node.priceRange?.minVariantPrice?.currencyCode || "EUR";
+            
+            return {
+              id: node.id,
+              name: node.title,
+              handle: node.handle,
+              price: `${price} ${currencyCode}`,
+              compareAtPrice: compareAtPrice ? `${compareAtPrice} ${currencyCode}` : null,
+              image: node.images?.edges[0]?.node?.url || "",
+              secondImage: node.images?.edges[1]?.node?.url || null,
+              isAvailable: node.availableForSale,
+            };
+          });
 
         if (drop005Products.length > 0) {
           drop005Data = {
@@ -177,7 +186,7 @@ export default async function Home() {
       {/* Content that slides over the fixed hero */}
       <div className="relative z-10 bg-white">
         {/* Drop005 Section - Featured Collection - Always shown */}
-        <Drop005Section />
+        <Drop005Section products={drop005Data?.products} />
         
         {/* All Products Grid */}
         <ProductGrid products={products} />

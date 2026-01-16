@@ -88,6 +88,20 @@ export async function getCollectionByHandle(handle: string) {
                   currencyCode
                 }
               }
+              variants(first: 1) {
+                edges {
+                  node {
+                    compareAtPrice {
+                      amount
+                      currencyCode
+                    }
+                    price {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
               images(first: 2) {
                 edges {
                   node {
